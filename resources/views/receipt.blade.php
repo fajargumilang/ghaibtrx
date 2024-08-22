@@ -12,11 +12,10 @@
         }
 
         .receipt-container {
-            width: 80mm;
             /* Ukuran 80mm */
             margin: 0 auto;
             padding: 10px;
-            border: 1px solid #000;
+            border: 0px solid #000;
             background: #fff;
             height: auto;
         }

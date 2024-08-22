@@ -191,8 +191,8 @@
         </table>
 
         <div class="footer">
-            <p>-= TERIMA KASIH ATAS KUNJUNGAN ANDA =-</p>
-            <p>DONASI DIISALURKAN MELALUI BMH</p>
+            <p>-=TERIMA KASIH ATAS KUNJUNGAN ANDA=-</p>
+            <p>DONASI DISALURKAN MELALUI BMH</p>
         </div>
         {{-- <p>Payment Method: {{ ucfirst($receipt->payment_method) }}</p> --}}
         <div class="dashed"></div>

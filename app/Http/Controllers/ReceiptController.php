@@ -168,8 +168,16 @@ class ReceiptController extends Controller
         ];
 
         // Buat instance mPDF
-        $mpdf = new Mpdf();
-
+        $mpdf = new Mpdf([
+            'mode' => 'utf-8',
+            'format' => [80, 297], // 80mm x 297mm
+            'margin_left' => 0,
+            'margin_right' => 0,
+            'margin_top' => 0,
+            'margin_bottom' => 0,
+            'margin_header' => 0,
+            'margin_footer' => 0,
+        ]);
 
         // Muat view dan render ke string
         $html = view('receipt', $data)->render();
