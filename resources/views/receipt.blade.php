@@ -198,7 +198,7 @@
 
         <div class="footer" style="margin-bottom:0.5rem;">
             <p>-= TERIMA KASIH ATAS KUNJUNGAN ANDA =-</p>
-            <p>DONASI DIISALURKAN MELALUI BMH</p>
+            <p>DONASI DISALURKAN MELALUI BMH</p>
         </div>
         <div class="dashed"></div>
 
