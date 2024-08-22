@@ -11,8 +11,7 @@
 
         .receipt-container {
             /* Atur sesuai dengan ukuran kertas thermal */
-            width: 80mm;
-            /* Lebar 48mm di piksel */
+            width: 100mm;
             margin: 0 auto;
             padding: 10px;
             border: 1px solid #000;
@@ -23,12 +22,12 @@
         .receipt-header,
         .footer {
             text-align: center;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         .under-header {
             text-align: left;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         .receipt-header h4,
@@ -44,12 +43,12 @@
 
         .items-table {
             width: 100%;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         .items-table th,
         .items-table td {
-            padding: 0px;
+            padding: 0;
             text-align: left;
         }
 
@@ -58,17 +57,11 @@
         }
 
         .footer p {
-            margin: 0px 0;
+            margin: 0;
         }
 
         /* CSS khusus untuk mode cetak */
         @media print {
-
-            /* Mengatur ukuran kertas ke A4 */
-            @page {
-                size: A4;
-                margin: 0;
-            }
 
             /* Sembunyikan elemen yang tidak ingin dicetak */
             body * {
@@ -81,14 +74,13 @@
                 visibility: visible;
             }
 
-            /* Atur posisi .receipt-container untuk muncul di bagian atas halaman dan di tengah */
+            /* Atur posisi .receipt-container untuk muncul di bagian atas halaman */
             .receipt-container {
                 position: absolute;
                 top: 0;
                 left: 50%;
                 transform: translateX(-50%);
-                width: 100%;
-                /* Menggunakan lebar penuh dari halaman A4 */
+                width: 100mm;
                 height: auto;
                 margin: 0;
                 padding: 0;
@@ -97,6 +89,7 @@
         }
     </style>
 @endpush
+
 
 @section('content')
     <button onclick="window.print()" class="btn btn-primary">Print</button>
@@ -207,7 +200,8 @@
                 <td class="text-uppercase">KASSA</td>
                 <td class="">:</td>
                 <td></td>
-                <td class="text-uppercase">{{ \Carbon\Carbon::parse($receipt->time_transaction)->format('d.m.Y') }}
+                <td class="float-right text-uppercase">
+                    {{ \Carbon\Carbon::parse($receipt->time_transaction)->format('d.m.Y') }}
                     [{{ \Carbon\Carbon::parse($receipt->time_transaction)->format('H:i') }}]
                 </td>
 
@@ -215,7 +209,7 @@
             <tr>
                 <td class="text-uppercase">MEMBER </td>
                 <td class="">:</td>
-                <td class="text-uppercase"> {{ $receipt->name_of_customer ?? '-' }}</td>
+                <td colspan="2" class="text-uppercase"> {{ $receipt->name_of_customer ?? '-' }}</td>
                 <td></td>
             </tr>
         </table>
