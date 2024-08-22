@@ -13,7 +13,7 @@
 
         .receipt-container {
             /* Atur sesuai dengan ukuran kertas thermal */
-            width: 100mm;
+            width: 80mm;
 
             /* Lebar 48mm di piksel */
             margin: 0 auto;
@@ -83,7 +83,7 @@
                 position: absolute;
                 left: 0;
                 top: 0;
-                width: 100mm;
+                width: 80mm;
                 /* Atur ukuran sesuai dengan ukuran kertas */
                 margin: 0;
                 height: auto;
