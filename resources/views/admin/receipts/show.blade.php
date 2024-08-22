@@ -13,7 +13,7 @@
 
         .receipt-container {
             /* Atur sesuai dengan ukuran kertas thermal */
-            width: 80mm;
+            width: 100mm;
 
             /* Lebar 48mm di piksel */
             margin: 0 auto;
@@ -193,7 +193,7 @@
         </table>
 
         <div class="footer">
-            <p>-= TERIMA KASIH ATASS KUNJUNGAN ANDA =-</p>
+            <p>-= TERIMA KASIH ATAS KUNJUNGAN ANDA =-</p>
             <p>DONASI DIISALURKAN MELALUI BMH</p>
         </div>
         {{-- <p>Payment Method: {{ ucfirst($receipt->payment_method) }}</p> --}}
@@ -202,7 +202,7 @@
         <table class="items-table">
             <tr>
                 <td class="text-uppercase">KASSA</td>
-                <td class=""> :</td>
+                <td class="">:</td>
                 <td></td>
                 <td class="text-uppercase">{{ \Carbon\Carbon::parse($receipt->time_transaction)->format('d.m.Y') }}
                     [{{ \Carbon\Carbon::parse($receipt->time_transaction)->format('H:i') }}]
@@ -211,7 +211,7 @@
             </tr>
             <tr>
                 <td class="text-uppercase">MEMBER </td>
-                <td class=""> :</td>
+                <td class="">:</td>
                 <td class="text-uppercase"> {{ $receipt->name_of_customer ?? '-' }}</td>
                 <td></td>
             </tr>
