@@ -73,8 +73,7 @@
                             <div class="form-group col-6">
                                 <label for="trans">Trans:</label>
                                 <input type="number" class="form-control  @error('trans') is-invalid @enderror"
-                                    id="trans" name="trans" placeholder="ex: 003-1155509001"
-                                    value="{{ old('trans') }}">
+                                    id="trans" name="trans" placeholder="ex: 1155509001" value="{{ old('trans') }}">
                                 @error('trans')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -83,15 +82,27 @@
                             </div>
                             <div class="form-group col-6">
                                 <label for="kassa">Kassa:</label>
-                                <input type="text" class="form-control  @error('kassa') is-invalid @enderror"
-                                    id="kassa" name="kassa" placeholder="ex: 003-NURUL QOMARII01.08.24 [11:55]"
-                                    value="{{ old('kassa') }}">
+                                <input type="number" class="form-control  @error('kassa') is-invalid @enderror"
+                                    id="kassa" name="kassa" placeholder="ex: 003" value="{{ old('kassa') }}">
                                 @error('kassa')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
+
+                            <div class="form-group col-6">
+                                <label for="name_of_kassa">Name of Kassa:</label>
+                                <input type="text" class="form-control  @error('name_of_kassa') is-invalid @enderror"
+                                    id="name_of_kassa" name="name_of_kassa" placeholder="ex: NURUL QOMARI"
+                                    value="{{ old('name_of_kassa') }}">
+                                @error('name_of_kassa')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+
                             <div class="form-group col-6">
                                 <label for="time_transaction">Time Transaction:</label>
                                 <input type="time" class="form-control  @error('time_transaction') is-invalid @enderror"
@@ -126,11 +137,12 @@
                                 @enderror
                             </div>
                             <div class="form-group col-6">
-                                <label for="name_of_kassa">Name of Kassa:</label>
-                                <input type="text" class="form-control  @error('name_of_kassa') is-invalid @enderror"
-                                    id="name_of_kassa" name="name_of_kassa" placeholder="ex: VAHYU VANNY HERTANTO"
-                                    value="{{ old('name_of_kassa') }}">
-                                @error('name_of_kassa')
+                                <label for="name_of_customer">Name of Customer:</label>
+                                <input type="text"
+                                    class="form-control  @error('name_of_customer') is-invalid @enderror"
+                                    id="name_of_customer" name="name_of_customer" placeholder="ex: VAHYU VANNY HERTANTO"
+                                    value="{{ old('name_of_customer') }}">
+                                @error('name_of_customer')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

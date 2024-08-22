@@ -16,6 +16,7 @@ class Receipt extends Model
 
         'member',
         'name_of_kassa',
+        'name_of_customer',
         'pt_akhir',
 
         'receipt_number',

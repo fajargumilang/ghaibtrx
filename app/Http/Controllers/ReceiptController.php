@@ -64,6 +64,7 @@ class ReceiptController extends Controller
                 // Informations
                 'member' => 'required|string|max:255',
                 'name_of_kassa' => 'required|string|max:255',
+                'name_of_customer' => 'required|string|max:255',
                 'pt_akhir' => 'required|string|max:255',
                 'uang_tunai' => 'required|string|max:255',
                 // Product details
@@ -83,6 +84,7 @@ class ReceiptController extends Controller
                 'time_transaction' => $request->time_transaction,
                 'member' => $request->member,
                 'name_of_kassa' => $request->name_of_kassa,
+                'name_of_customer' => $request->name_of_customer,
                 'pt_akhir' => $request->pt_akhir,
                 'payment_method' => $request->payment_method,
                 'uang_tunai' => $request->uang_tunai,

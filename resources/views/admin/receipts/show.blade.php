@@ -8,11 +8,25 @@
             font-family: 'Courier New', Courier, monospace;
         }
 
-        .receipt-container {}
+        .receipt-container {
+            /* Atur sesuai dengan ukuran kertas thermal */
+            width: 80mm;
+
+            /* Lebar 48mm di piksel */
+            margin: 0 auto;
+            padding: 10px;
+            border: 1px solid #000;
+            background: #fff;
+        }
 
         .receipt-header,
         .footer {
             text-align: center;
+            font-size: 12px;
+        }
+
+        .under-header {
+            text-align: left;
             font-size: 12px;
         }
 
@@ -50,24 +64,29 @@
         @media print {
 
             /* Sembunyikan elemen yang tidak ingin dicetak */
-            header,
-            footer,
-            nav,
-            .btn,
-            .btn-print {
-                display: none;
+            body * {
+                visibility: hidden;
             }
 
-            /* Pastikan hanya receipt-container yang terlihat */
+            /* Pastikan hanya .receipt-container yang terlihat */
             .receipt-container,
             .receipt-container * {
                 visibility: visible;
             }
 
+            /* Atur posisi .receipt-container untuk muncul di bagian atas halaman */
             .receipt-container {
                 position: absolute;
                 left: 0;
                 top: 0;
+                width: 80mm;
+                /* Atur ukuran sesuai dengan ukuran kertas */
+                margin: 0;
+                /* Hapus margin untuk cetak */
+                padding: 0;
+                /* Hapus padding untuk cetak */
+                border: none;
+                /* Hapus border jika tidak diperlukan */
             }
         }
     </style>
@@ -79,18 +98,21 @@
 
     <div class="receipt-container">
         <div class="receipt-header">
-            <h5 class="text-uppercase">{{ strtoupper($receipt->store_name) }}</h5>
-            <h5 class="text-uppercase">Your Shopping Partner</h5>
+            <div class="text-uppercase">{{ strtoupper($receipt->store_name) }}</div>
+            <div class="text-uppercase">Your Shopping Partner</div>
+            <br>
             <div class="text-uppercase">{{ strtoupper($receipt->address) }}</div>
             <div class="text-uppercase">HP: {{ $receipt->hp }}</div>
         </div>
 
         <div class="dashed"></div>
+        <div class="under-header">
+            <div class="text-uppercase">TRANS: {{ $receipt->kassa }}-{{ $receipt->trans }}</div>
+            <div class="text-uppercase">KASSA:
+                {{ $receipt->kassa }}-{{ $receipt->name_of_kassa }}{{ \Carbon\Carbon::parse($receipt->time_transaction)->format('d.m.Y') }}
+                [{{ \Carbon\Carbon::parse($receipt->time_transaction)->format('H:i') }}]</div>
 
-        <div class="text-uppercase">TRANS: {{ $receipt->trans }}</div>
-        <div class="text-uppercase">KASSA:
-            {{ $receipt->kassa }}{{ \Carbon\Carbon::parse($receipt->time_transaction)->format('d.m.Y') }}
-            [{{ \Carbon\Carbon::parse($receipt->time_transaction)->format('H:i') }}]</div>
+        </div>
 
         <div class="dashed"></div>
         @php
@@ -101,6 +123,11 @@
             @foreach ($receipt->items as $item)
                 <tr>
                     <td class="text-uppercase">{{ $item->product_name }}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
                     <td class="text-uppercase">{{ $item->quantity }},00 X
                         {{ $qtyRp }}{{ number_format($item->price, 0, ',', '.') }}</td>
                     </td>
@@ -152,7 +179,7 @@
             <tr>
                 <td class="text-uppercase">NAMA </td>
                 <td class=""> :</td>
-                <td class="text-uppercase"> {{ $receipt->name_of_kassa ?? 0 }}</td>
+                <td class="text-uppercase"> {{ $receipt->name_of_customer ?? '-' }}</td>
 
             </tr>
             <tr>
@@ -182,7 +209,7 @@
             <tr>
                 <td class="text-uppercase">MEMBER </td>
                 <td class=""> :</td>
-                <td class="text-uppercase"> {{ $receipt->name_of_kassa ?? 0 }}</td>
+                <td class="text-uppercase"> {{ $receipt->name_of_customer ?? '-' }}</td>
                 <td></td>
             </tr>
         </table>
@@ -192,14 +219,15 @@
                 {{-- //NOT FUNCTION --}}
                 <td class="text-uppercase">BELANJA MINIMAL 250.000</td>
                 <td>:</td>
-                <td class="float-right"> {{ number_format($kembalian, 0, ',', '.') }} </td>
+                <td class="float-right"> {{ number_format($receipt->total_amount, 0, ',', '.') }} </td>
 
             </tr>
             <tr>
                 {{-- //NOT FUNCTION --}}
                 <td class="text-uppercase">KUPON GEBYAR {{ $receipt->store_name }} {{ $currentYear }} </td>
                 <td>:</td>
-                <td class="float-right text-uppercase"> 9</td>
+                <td class="float-right text-uppercase"> {{ intval($receipt->total_amount / 250000) }}
+                </td>
             </tr>
         </table>
     </div>
