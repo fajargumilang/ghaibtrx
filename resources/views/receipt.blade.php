@@ -3,6 +3,41 @@
 
 <head>
     <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .text-uppercase {
+            text-transform: uppercase;
+        }
+
+        .float-right {
+            float: right;
+        }
+
+        .receipt-container {
+            page-break-inside: avoid;
+            /* Prevent page breaks inside container */
+            overflow: hidden;
+            /* Prevent overflow issues */
+        }
+
+        table {
+            border-collapse: collapse;
+            /* Ensure no extra space around table */
+        }
+
+        td,
+        th {
+            border: none;
+            /* Ensure no border causing extra space */
+            padding: 0;
+            /* Remove padding if causing extra space */
+        }
+
         body {
             font-family: 'Courier', Courier, monospace;
 
@@ -13,11 +48,15 @@
 
         .receipt-container {
             /* Ukuran 80mm */
+            width: 80mm;
+            /* Make sure container width matches PDF width */
             margin: 0 auto;
             padding: 10px;
             border: 0px solid #000;
             background: #fff;
             height: auto;
+            /* Ensure the container height adapts to content */
+
         }
 
         .receipt-header,
@@ -50,7 +89,7 @@
 
         .items-table th,
         .items-table td {
-            padding: 2px;
+            padding: 0px 0px 2px 0px;
             text-align: left;
         }
 
@@ -61,6 +100,10 @@
         .footer p {
             margin: 0;
             font-size: 12px;
+        }
+
+        .text-right {
+            text-align: right;
         }
     </style>
 </head>
@@ -84,6 +127,9 @@
         </div>
 
         <div class="dashed"></div>
+        @php
+            $qtyRp = '@';
+        @endphp
 
         <table class="items-table">
             @foreach ($receipt->items as $item)
@@ -92,40 +138,47 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td class="text-uppercase">{{ $item->quantity }},00 X
-                        {{ number_format($item->price, 0, ',', '.') }}</td>
-                    <td class="total text-uppercase"> : {{ number_format($item->total_price, 0, ',', '.') }}</td>
+                    <td class="text-uppercase float-right">{{ $item->quantity }},00 X
+                        {{ $qtyRp }}{{ number_format($item->price, 0, ',', '.') }}</td>
+                    <td class="text-right text-uppercase" style="text-align: right;"> :
+                        {{ number_format($item->total_price, 0, ',', '.') }}</td>
                 </tr>
             @endforeach
         </table>
         <div class="dashed"></div>
 
-        <table class="items-table">
+        <table class="items-table" style="margin-bottom:0.5rem;">
             <tr>
                 <td class="text-uppercase">Item : {{ $totalItems }}</td>
-                <td class="">TOTAL</td>
-                <td class="total">: Rp {{ number_format($receipt->total_amount, 0, ',', '.') }}</td>
+                <td class="" style="text-align: left;">TOTAL</td>
+                <td class="" style="text-align: left;">:Rp</td>
+                <td class="text-right" style="text-align: right;">
+                    {{ number_format($receipt->total_amount, 0, ',', '.') }}</td>
             </tr>
             <tr>
                 <td class="text-uppercase"></td>
-                <td class="">TUNAI</td>
-                <td class="total">: Rp {{ number_format($receipt->uang_tunai, 0, ',', '.') }}</td>
+                <td class="" style="text-align: left;">TUNAI</td>
+                <td class="" style="text-align: left;">:Rp</td>
+                <td class="text-right" style="text-align: right;">
+                    {{ number_format($receipt->uang_tunai, 0, ',', '.') }}</td>
             </tr>
             <tr>
                 <td class="text-uppercase">Qty : {{ $totalQuantity }}</td>
-                <td class="">KEMBALI</td>
-                <td class="total">: Rp {{ number_format($receipt->uang_tunai - $receipt->total_amount, 0, ',', '.') }}
+                <td class="" style="text-align: left;">KEMBALI</td>
+                <td class="" style="text-align: left;">:Rp</td>
+                <td class="text-right" style="text-align: right;">
+                    {{ number_format($receipt->uang_tunai - $receipt->total_amount, 0, ',', '.') }}
                 </td>
             </tr>
         </table>
 
-        <table class="items-table mb-2">
+        <table class="items-table mb-2" style="margin-bottom:0.5rem;">
             <tr>
                 <td class="text-uppercase">ANDA HEMAT : RP {{ $receipt->tunai ?? 0 }}</td>
             </tr>
         </table>
 
-        <table class="items-table mb-3">
+        <table class="items-table mb-3" style="margin-bottom:0.5rem;">
             <tr>
                 <td class="text-uppercase">MEMBER</td>
                 <td>:</td>
@@ -143,7 +196,7 @@
             </tr>
         </table>
 
-        <div class="footer">
+        <div class="footer" style="margin-bottom:0.5rem;">
             <p>-= TERIMA KASIH ATAS KUNJUNGAN ANDA =-</p>
             <p>DONASI DIISALURKAN MELALUI BMH</p>
         </div>
@@ -153,7 +206,7 @@
             <tr>
                 <td class="text-uppercase">KASSA</td>
                 <td>:</td>
-                <td class="float-right text-uppercase">
+                <td class="text-right text-uppercase" style="text-align: right;">
                     {{ \Carbon\Carbon::parse($receipt->time_transaction)->format('d.m.Y') }}
                     [{{ \Carbon\Carbon::parse($receipt->time_transaction)->format('H:i') }}]</td>
             </tr>
@@ -168,15 +221,16 @@
             <tr>
                 <td class="text-uppercase">BELANJA MINIMAL 250.000</td>
                 <td>:</td>
-                <td class="float-right"> {{ number_format($receipt->total_amount, 0, ',', '.') }} </td>
+                <td class="text-right" style="text-align: right;">
+                    {{ number_format($receipt->total_amount, 0, ',', '.') }} </td>
             </tr>
             <tr>
                 <td class="text-uppercase">KUPON GEBYAR {{ $receipt->store_name }} {{ $currentYear }} </td>
                 <td>:</td>
-                <td class="float-right text-uppercase"> {{ intval($receipt->total_amount / 250000) }}</td>
+                <td class="text-right text-uppercase" style="text-align: right;">
+                    {{ intval($receipt->total_amount / 250000) }}</td>
             </tr>
         </table>
-        <div class="dashed"></div>
 
     </div>
 </body>

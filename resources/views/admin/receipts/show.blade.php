@@ -93,8 +93,8 @@
 
 @section('content')
     <button onclick="window.print()" class="btn btn-primary">Print</button>
-    <a href="{{ route('receipts.index') }}" class="btn btn-danger">Back</a>
     <a href="{{ route('receipts.download', ['id' => $receipt->id]) }}" class="btn btn-info">Download Receipt</a>
+    <a href="{{ route('receipts.index') }}" class="btn btn-danger">Back</a>
 
 
     <div class="receipt-container">
@@ -139,9 +139,7 @@
         <div class="dashed"></div>
 
         @php
-            //NOT FUNCTION
             $kembalian = $receipt->uang_tunai - $receipt->total_amount;
-
         @endphp
         <table class="items-table">
             <tr>

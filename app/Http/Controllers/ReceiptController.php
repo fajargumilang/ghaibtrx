@@ -177,6 +177,8 @@ class ReceiptController extends Controller
             'margin_bottom' => 0,
             'margin_header' => 0,
             'margin_footer' => 0,
+            'autoPageBreak' => false, // Disable automatic page breaks
+
         ]);
 
         // Muat view dan render ke string
