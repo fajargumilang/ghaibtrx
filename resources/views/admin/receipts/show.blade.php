@@ -64,6 +64,12 @@
         /* CSS khusus untuk mode cetak */
         @media print {
 
+            /* Mengatur ukuran kertas ke A4 */
+            @page {
+                size: A4;
+                margin: 0;
+            }
+
             /* Sembunyikan elemen yang tidak ingin dicetak */
             body * {
                 visibility: hidden;
@@ -75,19 +81,19 @@
                 visibility: visible;
             }
 
-            /* Atur posisi .receipt-container untuk muncul di bagian atas halaman */
+            /* Atur posisi .receipt-container untuk muncul di bagian atas halaman dan di tengah */
             .receipt-container {
                 position: absolute;
                 top: 0;
                 left: 50%;
                 transform: translateX(-50%);
-                width: 80mm;
+                width: 100%;
+                /* Menggunakan lebar penuh dari halaman A4 */
                 height: auto;
                 margin: 0;
                 padding: 0;
                 border: none;
             }
-
         }
     </style>
 @endpush
@@ -122,7 +128,7 @@
         <table class="items-table">
             @foreach ($receipt->items as $item)
                 <tr>
-                    <td class="text-uppercase">{{ $item->product_name }}</td>
+                    <td colspan="3" class="text-uppercase">{{ $item->product_name }}</td>
                     <td></td>
                     <td></td>
                 </tr>
