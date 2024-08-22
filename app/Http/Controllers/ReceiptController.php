@@ -1,0 +1,148 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Receipt;
+use App\Models\ReceiptItem;
+use App\Models\Product;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
+
+use ErrorException;
+use Session;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+
+class ReceiptController extends Controller
+{
+
+    function generateUniqueReceiptNumber()
+    {
+        do {
+            // Kombinasi angka, huruf, dan timestamp
+            $receiptNumber = 'REC-' . date('YmdHis') . '-' . Str::upper(Str::random(4));
+
+            // Cek apakah nomor resi sudah ada di database
+            $exists = Receipt::where('receipt_number', $receiptNumber)->exists();
+        } while ($exists);
+
+        return $receiptNumber;
+    }
+
+    public function index()
+    {
+        $receipts = Receipt::orderBy('created_at', 'desc')->get();
+        return view('admin.receipts.index', compact('receipts'));
+    }
+
+    public function create()
+    {
+        $receiptItems = ReceiptItem::all();
+        return view(
+            'admin.receipts.create',
+            compact(
+                'receiptItems'
+            )
+        );
+    }
+
+    public function store(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            // Validasi data
+            $this->validate($request, [
+                // Store data
+                'payment_method' => 'required',
+                'store_name' => 'required|string|max:255',
+                'address' => 'required|string|max:255',
+                'hp' => 'required|string|max:15',
+                'trans' => 'required|numeric',
+                'kassa' => 'required|string|max:255',
+                'time_transaction' => 'required|date_format:H:i',
+                // Informations
+                'member' => 'required|string|max:255',
+                'name_of_kassa' => 'required|string|max:255',
+                'pt_akhir' => 'required|string|max:255',
+                'uang_tunai' => 'required|string|max:255',
+                // Product details
+                'product_name.*' => 'required|string|max:255',
+                'price.*' => 'required|numeric|min:0',
+                'quantity.*' => 'required|integer|min:1',
+            ]);
+
+            // Buat receipt terlebih dahulu untuk mendapatkan receipt_id
+            $receipt = Receipt::create([
+                'receipt_number' => $this->generateUniqueReceiptNumber(),
+                'store_name' => $request->store_name,
+                'address' => $request->address,
+                'hp' => $request->hp,
+                'trans' => $request->trans,
+                'kassa' => $request->kassa,
+                'time_transaction' => $request->time_transaction,
+                'member' => $request->member,
+                'name_of_kassa' => $request->name_of_kassa,
+                'pt_akhir' => $request->pt_akhir,
+                'payment_method' => $request->payment_method,
+                'uang_tunai' => $request->uang_tunai,
+                // 'total_amount' dan 'final_amount' akan di-update setelah loop
+            ]);
+
+            $totalAmount = 0; // Inisialisasi total amount
+
+            foreach ($request->product_name as $index => $name) {
+                $totalPrice = $request->price[$index] * $request->quantity[$index];
+
+                $totalAmount += $totalPrice;
+
+                ReceiptItem::create([
+                    'receipt_id' => $receipt->id,
+                    'product_name' => $name,
+                    'price' => $request->price[$index],
+                    'quantity' => $request->quantity[$index],
+                    'total_price' => $totalPrice,
+                ]);
+            }
+
+            $discount = $request->discount ?? 0;
+            $tax = $request->tax ?? 0;
+
+            // Pastikan diskon dan pajak tidak nol untuk menghindari division by zero
+            $discountCalculate = $discount > 0 ? ($totalAmount * $discount / 100) : 0;
+            $taxCalculate = $tax > 0 ? ($totalAmount * $tax / 100) : 0;
+
+            // Hitung finalAmount setelah menghitung diskon dan pajak
+            $finalAmount = ($totalAmount - $discountCalculate) + $taxCalculate;
+
+            $receipt->update([
+                'total_amount' => $totalAmount,
+                'discount' => $discount,
+                'tax' => $tax,
+                'final_amount' => $finalAmount,
+            ]);
+
+            DB::commit();
+            return redirect()->route('receipts.index')->with('success', 'Receipt created successfully!');
+        } catch (ErrorException $e) {
+            DB::rollback();
+            return redirect()->back()->with('error', 'error gan.');
+        }
+    }
+
+    public function show($id)
+    {
+        $receipt = Receipt::with('items')->findOrFail($id);
+        $totalQuantity = $receipt->items->sum('quantity');
+        $totalItems = $receipt->items->count('id');
+
+        $currentYear = Carbon::now()->year;
+
+        return view('admin.receipts.show', compact(
+            'receipt',
+            'totalQuantity',
+            'totalItems',
+            'currentYear'
+        ));
+    }
+}
