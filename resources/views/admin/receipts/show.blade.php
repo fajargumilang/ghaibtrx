@@ -7,14 +7,11 @@
         body {
             font-family: 'Courier New', Courier, monospace;
             color: #000;
-            /* Ubah warna teks menjadi hitam */
-
         }
 
         .receipt-container {
             /* Atur sesuai dengan ukuran kertas thermal */
             width: 80mm;
-
             /* Lebar 48mm di piksel */
             margin: 0 auto;
             padding: 10px;
@@ -81,17 +78,14 @@
             /* Atur posisi .receipt-container untuk muncul di bagian atas halaman */
             .receipt-container {
                 position: absolute;
-                left: 0;
                 top: 0;
+                left: 50%;
+                transform: translateX(-50%);
                 width: 80mm;
-                /* Atur ukuran sesuai dengan ukuran kertas */
-                margin: 0;
                 height: auto;
-                /* Hapus margin untuk cetak */
+                margin: 0;
                 padding: 0;
-                /* Hapus padding untuk cetak */
                 border: none;
-                /* Hapus border jika tidak diperlukan */
             }
 
         }
