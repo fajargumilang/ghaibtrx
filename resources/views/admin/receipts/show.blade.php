@@ -13,7 +13,7 @@
 
         .receipt-container {
             /* Atur sesuai dengan ukuran kertas thermal */
-            width: 80mm;
+            width: 100mm;
 
             /* Lebar 48mm di piksel */
             margin: 0 auto;
@@ -26,12 +26,12 @@
         .receipt-header,
         .footer {
             text-align: center;
-            font-size: 12px;
+            font-size: 16px;
         }
 
         .under-header {
             text-align: left;
-            font-size: 12px;
+            font-size: 16px;
         }
 
         .receipt-header h4,
@@ -47,7 +47,7 @@
 
         .items-table {
             width: 100%;
-            font-size: 12px;
+            font-size: 16px;
         }
 
         .items-table th,
@@ -83,7 +83,7 @@
                 position: absolute;
                 left: 0;
                 top: 0;
-                width: 80mm;
+                width: 100mm;
                 /* Atur ukuran sesuai dengan ukuran kertas */
                 margin: 0;
                 height: auto;
