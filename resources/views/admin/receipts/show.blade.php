@@ -8,13 +8,7 @@
             font-family: 'Courier New', Courier, monospace;
         }
 
-        .receipt-container {
-            width: 320px;
-            margin: 20px auto;
-            padding: 10px;
-            border: 1px solid #000;
-            background: #fff;
-        }
+        .receipt-container {}
 
         .receipt-header,
         .footer {
