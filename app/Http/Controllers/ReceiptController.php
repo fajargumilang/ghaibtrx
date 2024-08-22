@@ -170,6 +170,7 @@ class ReceiptController extends Controller
         // Buat instance mPDF
         $mpdf = new Mpdf();
 
+
         // Muat view dan render ke string
         $html = view('receipt', $data)->render();
 
