@@ -13,6 +13,8 @@ use ErrorException;
 use Session;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Mpdf\Mpdf;
+
 
 class ReceiptController extends Controller
 {
@@ -146,5 +148,44 @@ class ReceiptController extends Controller
             'totalItems',
             'currentYear'
         ));
+    }
+
+
+    public function downloadReceipt($id)
+    {
+        // Ambil data receipt dari database berdasarkan $id
+        $receipt = Receipt::with('items')->findOrFail($id);
+        $totalQuantity = $receipt->items->sum('quantity');
+        $totalItems = $receipt->items->count();
+        $currentYear = Carbon::now()->year;
+
+        // Data yang akan dikirim ke view PDF
+        $data = [
+            'receipt' => $receipt,
+            'totalItems' => $totalItems,
+            'totalQuantity' => $totalQuantity,
+            'currentYear' => $currentYear,
+        ];
+
+        // Buat instance mPDF
+        $mpdf = new Mpdf();
+
+        // Muat view dan render ke string
+        $html = view('receipt', $data)->render();
+
+        // Tulis HTML ke PDF
+        $mpdf->WriteHTML($html);
+
+        // Unduh PDF
+        return response()->stream(
+            function () use ($mpdf) {
+                $mpdf->Output('receipt.pdf', 'D');
+            },
+            200,
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="receipt.pdf"',
+            ]
+        );
     }
 }

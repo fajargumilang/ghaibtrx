@@ -53,6 +53,8 @@ Route::group(['namespace' => 'Admin', 'middleware' => 'auth', 'prefix' => 'admin
 	Route::get('/receipts/create', [ReceiptController::class, 'create'])->name('receipts.create');
 	Route::post('/receipts', [ReceiptController::class, 'store'])->name('receipts.store');
 	Route::get('/receipts/{id}', [ReceiptController::class, 'show'])->name('receipts.show');
+
+	Route::get('/download-receipt/{id}', [ReceiptController::class, 'downloadReceipt'])->name('receipts.download');
 });
 
 Route::group(['namespace' => 'User', 'middleware' => 'auth', 'prefix' => 'user'], function () {
