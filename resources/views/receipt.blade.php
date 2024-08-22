@@ -4,7 +4,8 @@
 <head>
     <style>
         body {
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'Courier', Courier, monospace;
+
             color: #000;
             margin: 0;
             padding: 0;
