@@ -12,15 +12,16 @@
         }
 
         .receipt-container {
+            /* Atur sesuai dengan ukuran kertas thermal */
             width: 80mm;
+
+            /* Lebar 48mm di piksel */
             margin: 0 auto;
             padding: 10px;
             border: 1px solid #000;
             background: #fff;
-            /* Biarkan tinggi otomatis mengikuti konten */
             height: auto;
         }
-
 
         .receipt-header,
         .footer {
@@ -78,16 +79,19 @@
             }
 
             /* Atur posisi .receipt-container untuk muncul di bagian atas halaman */
-            @media print {
-                .receipt-container {
-                    position: static;
-                    page-break-after: auto;
-                    /* Pastikan tidak ada halaman kosong setelahnya */
-                    page-break-before: avoid;
-                    /* Hindari pemotongan halaman sebelum konten */
-                    page-break-inside: avoid;
-                    /* Hindari pemotongan di dalam halaman */
-                }
+            .receipt-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 80mm;
+                /* Atur ukuran sesuai dengan ukuran kertas */
+                margin: 0;
+                height: auto;
+                /* Hapus margin untuk cetak */
+                padding: 0;
+                /* Hapus padding untuk cetak */
+                border: none;
+                /* Hapus border jika tidak diperlukan */
             }
 
         }
