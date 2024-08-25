@@ -82,4 +82,30 @@ class ProductController extends Controller
         // Jika berhasil, kembalikan response sukses
         return response()->json(['success' => 'Data berhasil dihapus']);
     }
+
+    public function edit($id)
+    {
+        $product = Product::find($id);
+        return response()->json($product);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric',
+            'description' => 'required|string|max:1000',
+        ]);
+        $product = Product::find($id);
+        if ($product) {
+            $product->name = $request->input('name');
+            $product->price = $request->input('price');
+            $product->description = $request->input('description');
+            $product->save();
+
+            return response()->json(['success' => 'Product ' . $product->name . ' updated successfully']);
+        } else {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
+    }
 }

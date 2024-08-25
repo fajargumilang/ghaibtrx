@@ -25,11 +25,16 @@ class Receipt extends Model
         'tax',
         'final_amount',
         'payment_method',
-        'uang_tunai'
+        'uang_tunai',
+        'anda_hemat'
     ];
 
     public function items()
     {
         return $this->hasMany(ReceiptItem::class, 'receipt_id');
+    }
+    public function product()
+    {
+        return $this->hasMany(Product::class, 'receipt_id');
     }
 }

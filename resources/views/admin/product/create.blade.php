@@ -65,7 +65,8 @@
                                         <label for="description">Description:</label>
                                         <input type="text"
                                             class="form-control  @error('description') is-invalid @enderror"
-                                            description-input" id="description" name="description" placeholder="ex: 3">
+                                            description-input" id="description" name="description"
+                                            placeholder="ex: Lorem Ipsuum">
                                         @error('description')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>

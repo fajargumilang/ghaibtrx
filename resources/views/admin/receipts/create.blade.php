@@ -106,7 +106,7 @@
                             <div class="form-group col-6">
                                 <label for="time_transaction">Time Transaction:</label>
                                 <input type="time" class="form-control  @error('time_transaction') is-invalid @enderror"
-                                    id="time_transaction" name="time_transaction" value="11:55" placeholder="ex: 11:55"
+                                    id="time_transaction" name="time_transaction" value="" placeholder="ex: 11:55"
                                     value="{{ old('time_transaction') }}">
                                 @error('time_transaction')
                                     <span class="invalid-feedback" role="alert">
@@ -120,7 +120,7 @@
                         <div class="row">
                             <div class=" col-12">
                                 <h5>
-                                    <strong>Informations </strong>
+                                    <strong>Informations - (Optional)</strong>
                                 </h5>
                                 <hr>
                             </div>
@@ -159,6 +159,18 @@
                                     </span>
                                 @enderror
                             </div>
+
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class=" col-12">
+                                <h5>
+                                    <strong>Payment </strong>
+                                </h5>
+                                <hr>
+                            </div>
+
+
                             <div class="form-group col-6">
                                 <label for="paymentMethod">Payment Method:</label>
                                 <select class="form-control @error('payment_method') is-invalid @enderror"
@@ -173,6 +185,17 @@
                                 </select>
 
                                 @error('payment_method')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group col-6">
+                                <label for="anda_hemat">Anda Hemat : - (Optional)</label>
+                                <input type="number" class="form-control  @error('anda_hemat') is-invalid @enderror"
+                                    id="anda_hemat" name="anda_hemat" placeholder="ex: 500.000"
+                                    value="{{ old('anda_hemat') }}">
+                                @error('anda_hemat')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -197,6 +220,7 @@
                                     </span>
                                 @enderror
                             </div>
+
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -208,8 +232,15 @@
                                 <div class="row">
                                     <div class="form-group col-4">
                                         <label for="product_name">[1] Product Name:</label>
-                                        <input type="text" class="form-control" id="product_name"
-                                            name="product_name[]" placeholder="ex: Enter product name">
+                                        <select class="select2 form-control product-select" name="product_name[]"
+                                            placeholder="ex: Enter product name">
+                                            <option value="">-= Select Product</option>
+                                            @foreach ($products as $product)
+                                                <option value="{{ $product->name }}" data-price="{{ $product->price }}">
+                                                    {{ $product->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                         @error('product_name.*')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -217,13 +248,12 @@
 
                                     <div class="form-group col-4">
                                         <label for="price">Price:</label>
-                                        <input type="text" class="form-control price-input" id="price"
-                                            name="price[]" placeholder="ex: 10000">
+                                        <input type="text" class="form-control price-input" name="price[]"
+                                            placeholder="ex: 10000" readonly>
                                         @error('price.*')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-
 
                                     <div class="form-group col-4">
                                         <label for="quantity">Quantity:</label>
@@ -254,124 +284,133 @@
     </div>
 @endsection
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.7-beta.15/jquery.inputmask.min.js"></script> --}}
+@push('js')
+    {{-- CLONE FIELD PRODUCT, PRICE, QTY --}}
 
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            // Menggunakan jQuery untuk memudahkan pemilihan elemen dan manipulasi DOM
+            $(document).on('change', '.product-select', function() {
+                // Menyimpan referensi ke elemen yang berubah
+                var $select = $(this);
+                var $priceInput = $select.closest('.form-group').next('.form-group').find('.price-input');
 
-<script>
-    $(document).ready(function() {
-        $('#paymentMethod').select2();
-    });
-</script>
+                // Mendapatkan harga dari opsi yang dipilih
+                var selectedOption = $select.find('option:selected');
+                var price = selectedOption.data('price');
 
-{{-- <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var priceInputs = document.querySelectorAll('input[name="price[]"]');
-
-        priceInputs.forEach(function(priceInput) {
-            priceInput.addEventListener('input', function(e) {
-                // Hapus semua karakter non-digit
-                var value = this.value.replace(/\D/g, '');
-
-                // Format angka dengan titik sebagai pemisah ribuan
-                var formattedValue = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-
-                // Set nilai input dengan nilai yang telah diformat
-                this.value = formattedValue;
+                // Memperbarui input harga
+                $priceInput.val(price || '');
             });
         });
-    });
-</script> --}}
+    </script>
 
 
+    <script>
+        $(document).ready(function() {
+            // Function to initialize Select2
+            function initializeSelect2() {
+                $('.select2').each(function() {
+                    $(this).select2({
+                        theme: 'bootstrap4'
+                    });
+                });
+            }
 
-{{-- CLONE FIELD PRODUCT, PRICE, QTY --}}
+            // Initialize Select2 for existing fields
+            initializeSelect2();
 
+            // Function to calculate total price
+            function calculateTotalPrice() {
+                let totalPrice = 0;
 
-<script>
-    $(document).ready(function() {
-        // Function to calculate total price
-        function calculateTotalPrice() {
-            let totalPrice = 0;
+                $('.product-group').each(function() {
+                    let price = $(this).find('.price-input').val().replace(/\./g, '').replace(/[^0-9]/g,
+                        '');
+                    let quantity = $(this).find('.quantity-input').val().replace(/\./g, '').replace(
+                        /[^0-9]/g, '');
 
-            $('.product-group').each(function() {
-                let price = $(this).find('.price-input').val().replace(/\./g, '').replace(/[^0-9]/g,
-                    '');
-                let quantity = $(this).find('.quantity-input').val().replace(/\./g, '').replace(
-                    /[^0-9]/g, '');
+                    price = isNaN(price) ? 0 : parseInt(price);
+                    quantity = isNaN(quantity) ? 0 : parseInt(quantity);
 
-                price = isNaN(price) ? 0 : parseInt(price);
-                quantity = isNaN(quantity) ? 0 : parseInt(quantity);
+                    totalPrice += price * quantity;
+                });
 
-                totalPrice += price * quantity;
+                $('#total_price').val(totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
+            }
+
+            // Calculate total price on input change
+            $(document).on('input', '.price-input, .quantity-input', function() {
+                calculateTotalPrice();
             });
 
-            $('#total_price').val(totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
-        }
-
-        // Calculate total price on input change
-        $(document).on('input', '.price-input, .quantity-input', function() {
-            calculateTotalPrice();
-        });
-
-        // Function to add new fields
-        $('#add-field').click(function() {
-            var newProductGroup = $('.product-group:first').clone();
-            newProductGroup.find('input').val('');
-            var totalFields = $('.product-group').length + 1;
-            newProductGroup.find('label[for="product_name"]').text('[' + totalFields +
-                '] Product Name:');
-            $('#product-fields').append(newProductGroup);
-            updateRemoveButtonVisibility();
-        });
-
-        // Function to remove fields
-        $(document).on('click', '.remove-field', function() {
-            $(this).closest('.product-group').remove();
-            $('.product-group').each(function(index) {
-                $(this).find('label[for="product_name"]').text('[' + (index + 1) +
+            // Function to add new fields
+            $('#add-field').click(function() {
+                var newProductGroup = $('.product-group:first').clone();
+                newProductGroup.find('input').val('');
+                newProductGroup.find('select').each(function() {
+                    $(this).removeClass('select2-hidden-accessible').removeData('select2').next(
+                        '.select2-container').remove();
+                    $(this).select2({
+                        theme: 'bootstrap4'
+                    });
+                });
+                var totalFields = $('.product-group').length + 1;
+                newProductGroup.find('label[for="product_name"]').text('[' + totalFields +
                     '] Product Name:');
+                $('#product-fields').append(newProductGroup);
+                updateRemoveButtonVisibility();
             });
+
+            // Function to remove fields
+            $(document).on('click', '.remove-field', function() {
+                $(this).closest('.product-group').remove();
+                $('.product-group').each(function(index) {
+                    $(this).find('label[for="product_name"]').text('[' + (index + 1) +
+                        '] Product Name:');
+                });
+                updateRemoveButtonVisibility();
+                calculateTotalPrice();
+            });
+
+            // Function to update remove button visibility
+            function updateRemoveButtonVisibility() {
+                if ($('.product-group').length > 1) {
+                    $('.remove-field').show();
+                } else {
+                    $('.remove-field').hide();
+                }
+            }
+
+            // Initial call to set the correct state of remove buttons
             updateRemoveButtonVisibility();
-            calculateTotalPrice();
+
+            // Handle form submission
+            $('#payment-form').submit(function(event) {
+                // Prevent default form submission
+                event.preventDefault();
+
+                // Calculate total price
+                calculateTotalPrice();
+
+                // Get the available cash
+                let uangTunai = $('#uang_tunai').val().replace(/\./g, '').replace(/[^0-9]/g, '');
+                uangTunai = isNaN(uangTunai) ? 0 : parseInt(uangTunai);
+
+                // Get the total price
+                let totalPrice = $('#total_price').val().replace(/\./g, '').replace(/[^0-9]/g, '');
+                totalPrice = isNaN(totalPrice) ? 0 : parseInt(totalPrice);
+
+                // Check if total price exceeds available cash
+                if (totalPrice > uangTunai) {
+                    alert("Total price cannot exceed payment amount.");
+                } else {
+                    // If valid, you can submit the form or perform the necessary action
+                    // Uncomment the following line to actually submit the form
+                    $(this).off('submit').submit();
+                }
+            });
         });
-
-        // Function to update remove button visibility
-        function updateRemoveButtonVisibility() {
-            if ($('.product-group').length > 1) {
-                $('.remove-field').show();
-            } else {
-                $('.remove-field').hide();
-            }
-        }
-
-        // Initial call to set the correct state of remove buttons
-        updateRemoveButtonVisibility();
-
-        // Handle form submission
-        $('#payment-form').submit(function(event) {
-            // Prevent default form submission
-            event.preventDefault();
-
-            // Calculate total price
-            calculateTotalPrice();
-
-            // Get the available cash
-            let uangTunai = $('#uang_tunai').val().replace(/\./g, '').replace(/[^0-9]/g, '');
-            uangTunai = isNaN(uangTunai) ? 0 : parseInt(uangTunai);
-
-            // Get the total price
-            let totalPrice = $('#total_price').val().replace(/\./g, '').replace(/[^0-9]/g, '');
-            totalPrice = isNaN(totalPrice) ? 0 : parseInt(totalPrice);
-
-            // Check if total price exceeds available cash
-            if (totalPrice > uangTunai) {
-                alert("Total price cannot exceed payment amount.");
-            } else {
-                // If valid, you can submit the form or perform the necessary action
-                // Uncomment the following line to actually submit the form
-                $(this).off('submit').submit();
-            }
-        });
-    });
-</script>
+    </script>
+@endpush

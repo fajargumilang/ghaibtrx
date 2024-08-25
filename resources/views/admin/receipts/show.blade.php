@@ -132,7 +132,8 @@
                     <td class="text-uppercase">{{ $item->quantity }},00 X
                         {{ $qtyRp }}{{ number_format($item->price, 0, ',', '.') }}</td>
                     </td>
-                    <td class="total text-uppercase"> : {{ number_format($item->total_price, 0, ',', '.') }}</td>
+                    <td>:</td>
+                    <td class="float-right text-uppercase"> {{ number_format($item->total_price, 0, ',', '.') }}</td>
                 </tr>
             @endforeach
         </table>
@@ -165,7 +166,7 @@
         <table class="items-table mb-2">
             <tr>
                 {{-- //NOT FUNCTION --}}
-                <td class="text-uppercase">ANDA HEMAT : RP {{ $receipt->tunai ?? 0 }}</td>
+                <td class="text-uppercase">ANDA HEMAT : RP {{ $receipt->anda_hemat ?? 0 }}</td>
             </tr>
         </table>
 
@@ -201,7 +202,8 @@
                 <td class="">:</td>
                 <td></td>
                 <td class="float-right text-uppercase">
-                    {{ \Carbon\Carbon::parse($receipt->time_transaction)->format('d.m.Y') }}
+                    {{ \Carbon\Carbon::parse($receipt->time_transaction)->format('d.m.y') }}
+
                     [{{ \Carbon\Carbon::parse($receipt->time_transaction)->format('H:i') }}]
                 </td>
             </tr>

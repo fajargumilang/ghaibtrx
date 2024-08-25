@@ -28,7 +28,7 @@
         <div class="card-header">
             <!-- Button trigger modal -->
             <a href="{{ route('product.create') }}" class="btn btn-primary">
-                Create Product
+                Create Receipt
             </a>
 
         </div>
@@ -51,6 +51,43 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Edit -->
+    <div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="edit-modalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="edit-modalLabel">Edit Data</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="hidden" required="" id="id" name="id" class="form-control">
+                            <input type="" required="" id="name" name="name" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="price">price</label>
+                            <input type="" required="" id="price" name="price" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="" required="" id="description" name="description" class="form-control">
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="buton" class="btn btn-primary btn-update" id="btnupdate">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Edit -->
 
     <div class="modal fade" id="destroy-modal" tabindex="-1" role="dialog" aria-labelledby="destroy-modalLabel"
         aria-hidden="true">
@@ -94,7 +131,11 @@
                     },
                     {
                         data: 'price',
-                        name: 'price'
+                        name: 'price',
+                        render: function(data, type, row) {
+                            // Format the price with thousands separator
+                            return formatNumber(data);
+                        }
                     },
                     {
                         data: 'description',
@@ -102,7 +143,11 @@
                     },
                     {
                         data: 'created_at',
-                        name: 'created_at'
+                        name: 'created_at',
+                        render: function(data, type, row) {
+                            // Format the date to dd.mm.yy
+                            return formatDate(data);
+                        }
                     },
                     {
                         data: 'action',
@@ -113,6 +158,67 @@
                 ]
             });
         });
+
+        function formatNumber(value) {
+            if (value === null || value === undefined) {
+                return '';
+            }
+            return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) {
+                return '';
+            }
+            var date = new Date(dateString);
+            var day = String(date.getDate()).padStart(2, '0');
+            var month = String(date.getMonth() + 1).padStart(2, '0');
+            var year = String(date.getFullYear()).slice(); // Get last 2 digits of the year
+
+            return day + '.' + month + '.' + year;
+        }
+
+        // Edit & Update
+        $('body').on("click", ".btn-edit", function() {
+            var id = $(this).data("id")
+
+            $.ajax({
+                url: "product/" + id + "/edit",
+
+                method: "GET",
+                success: function(response) {
+                    $("#edit-modal").modal("show")
+                    $("#id").val(response.id)
+                    $("#name").val(response.name)
+                    $("#price").val(response.price)
+                    $("#description").val(response.description)
+                }
+            })
+        });
+
+
+        $('#btnupdate').on("click", function(e) {
+            e.preventDefault();
+            var form = $("#editForm");
+            var id = $("#id").val();
+
+            $.ajax({
+                url: "product/" + id,
+                method: "PUT",
+                data: form.serialize(),
+                success: function(response) {
+                    $('.data-table').DataTable().ajax.reload();
+                    $("#edit-modal").modal("hide");
+                    flash("success", response.success);
+                },
+                error: function(xhr) {
+                    // Tampilkan pesan error jika permintaan gagal
+                    flash("error", "Terjadi kesalahan: " + xhr.responseText);
+                }
+            });
+        });
+        //Edit & Update
+
 
         $('body').on("click", ".btn-delete", function() {
             var id = $(this).data("id"); // Mengambil data-id dari tombol delete

@@ -24,13 +24,81 @@
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <!-- Custom styles for this template-->
     <link href="{{ asset('template/backend/sb-admin-2') }}/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <style>
+        /* Custom CSS for Select2 with Bootstrap 4 form-control */
+        .select2-container--bootstrap4 .select2-selection--single {
+            height: calc(2.25rem + 2px);
+            /* Match Bootstrap form-control height */
+            border: 2px solid #4A90E2;
+            /* Custom border color */
+            border-radius: 4px;
+            /* Adjust border radius */
+            padding: 0.375rem 0.75rem;
+            /* Adjust padding */
+            background-color: #ffffff;
+            /* Custom background color */
+            color: #333;
+            /* Custom text color */
+            font-size: 16px;
+            /* Adjust font size */
+            transition: border-color 0.3s, box-shadow 0.3s;
+            /* Smooth transition */
+        }
+
+        .select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered {
+            line-height: 1.5;
+            /* Align text vertically */
+        }
+
+        .select2-container--bootstrap4 .select2-selection--single .select2-selection__arrow {
+            height: calc(2.25rem + 2px);
+            /* Match height with form-control */
+            right: 0.75rem;
+            /* Adjust arrow position */
+            top: 50%;
+            /* Vertically center the arrow */
+            transform: translateY(-50%);
+            /* Adjust for centering */
+        }
+
+        .select2-container--bootstrap4 .select2-selection--single:focus {
+            border-color: #1E7FCB;
+            /* Border color on focus */
+            box-shadow: 0 0 5px rgba(30, 127, 203, 0.5);
+            /* Box shadow on focus */
+            background-color: #fff;
+            /* Background color on focus */
+        }
+
+        .select2-container--bootstrap4 .select2-selection--single .select2-selection__placeholder {
+            color: #999;
+            /* Custom placeholder color */
+            opacity: 1;
+            /* Ensure full opacity */
+        }
+
+        .select2-container--bootstrap4 .select2-results__option--highlighted {
+            background-color: #1E7FCB;
+            /* Custom highlight color */
+            color: #fff;
+            /* Custom text color for highlighted option */
+        }
+
+        .select2-container--bootstrap4 .select2-dropdown {
+            border-radius: 0 0 4px 4px;
+            /* Custom dropdown border radius */
+            border: 2px solid #4A90E2;
+            /* Custom border for dropdown */
+        }
+    </style>
     @stack('css')
-    <script>
-        var base_url = "{{ url('/admin') }}"
-        "
-    </script>
+
 </head>
 
 <body id="page-top">
@@ -67,7 +135,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Fajar Gumilang {{ date('Y') }}</span>
+                        <span>Copyright &copy; {{ date('Y') }}</span>
                     </div>
                 </div>
             </footer>
@@ -129,6 +197,8 @@
             }
         });
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js" defer></script>
     @stack('js')
 </body>
 

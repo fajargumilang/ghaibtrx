@@ -40,11 +40,11 @@ class ReceiptController extends Controller
 
     public function create()
     {
-        $receiptItems = ReceiptItem::all();
+        $products = Product::all();
         return view(
             'admin.receipts.create',
             compact(
-                'receiptItems'
+                'products'
             )
         );
     }
@@ -63,16 +63,19 @@ class ReceiptController extends Controller
                 'trans' => 'required|numeric',
                 'kassa' => 'required|string|max:255',
                 'time_transaction' => 'required|date_format:H:i',
+                'anda_hemat' => 'nullable|string|max:15',
                 // Informations
-                'member' => 'required|string|max:255',
                 'name_of_kassa' => 'required|string|max:255',
-                'name_of_customer' => 'required|string|max:255',
-                'pt_akhir' => 'required|string|max:255',
                 'uang_tunai' => 'required|string|max:255',
+
+                'member' => 'nullable|string|max:255',
+                'name_of_customer' => 'nullable|string|max:255',
+                'pt_akhir' => 'nullable|string|max:255',
                 // Product details
                 'product_name.*' => 'required|string|max:255',
                 'price.*' => 'required|numeric|min:0',
                 'quantity.*' => 'required|integer|min:1',
+
             ]);
 
             // Buat receipt terlebih dahulu untuk mendapatkan receipt_id
@@ -90,11 +93,11 @@ class ReceiptController extends Controller
                 'pt_akhir' => $request->pt_akhir,
                 'payment_method' => $request->payment_method,
                 'uang_tunai' => $request->uang_tunai,
+                'anda_hemat' => $request->anda_hemat,
                 // 'total_amount' dan 'final_amount' akan di-update setelah loop
             ]);
 
             $totalAmount = 0; // Inisialisasi total amount
-
             foreach ($request->product_name as $index => $name) {
                 $totalPrice = $request->price[$index] * $request->quantity[$index];
 
