@@ -189,7 +189,7 @@
             </tr>
         </table>
 
-        @if ($receipt->member == null || $receipt->name_of_customer == null || $receipt->pt_akhir == null)
+        @if ($receipt->member == !null || $receipt->name_of_customer == !null || $receipt->pt_akhir == !null)
             <table class="items-table mb-3" style="margin-bottom:0.5rem;">
                 <tr>
                     <td class="text-uppercase">MEMBER</td>
@@ -223,7 +223,7 @@
                     {{ \Carbon\Carbon::parse($receipt->time_transaction)->format('d.m.Y') }}
                     [{{ \Carbon\Carbon::parse($receipt->time_transaction)->format('H:i') }}]</td>
             </tr>
-            @if ($receipt->name_of_customer == null)
+            @if ($receipt->name_of_customer == !null)
                 <tr>
                     <td class="text-uppercase">MEMBER</td>
                     <td>:</td>

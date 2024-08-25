@@ -204,14 +204,15 @@
                     {{ \Carbon\Carbon::parse($receipt->time_transaction)->format('d.m.Y') }}
                     [{{ \Carbon\Carbon::parse($receipt->time_transaction)->format('H:i') }}]
                 </td>
-
             </tr>
-            <tr>
-                <td class="text-uppercase">MEMBER </td>
-                <td class="">:</td>
-                <td colspan="2" class="text-uppercase"> {{ $receipt->name_of_customer ?? '-' }}</td>
-                <td></td>
-            </tr>
+            @if ($receipt->name_of_customer == null)
+                <tr>
+                    <td class="text-uppercase">MEMBER </td>
+                    <td class="">:</td>
+                    <td colspan="2" class="text-uppercase"> {{ $receipt->name_of_customer ?? '-' }}</td>
+                    <td></td>
+                </tr>
+            @endif
         </table>
         <div class="dashed"></div>
         <table class="items-table">
