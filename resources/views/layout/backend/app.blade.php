@@ -27,6 +27,10 @@
     <!-- Custom styles for this template-->
     <link href="{{ asset('template/backend/sb-admin-2') }}/css/sb-admin-2.min.css" rel="stylesheet">
     @stack('css')
+    <script>
+        var base_url = "{{ url('/admin') }}"
+        "
+    </script>
 </head>
 
 <body id="page-top">

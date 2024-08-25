@@ -17,6 +17,8 @@ class ProfileController extends Controller
 		return view('user.profile');
 	}
 
+	
+
 	public function update(Request $request, User $user)
 	{
 		if ($request->password) {

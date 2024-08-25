@@ -109,13 +109,24 @@
 </head>
 
 <body>
+    @php
+        // Fungsi untuk menambahkan spasi setiap 4 digit
+        function formatPhoneNumber($number)
+        {
+            return implode(' ', str_split($number, 4));
+        }
+
+        $formattedHp = formatPhoneNumber($receipt->hp);
+    @endphp
+
     <div class="receipt-container">
         <div class="receipt-header">
             <div class="text-uppercase">{{ strtoupper($receipt->store_name) }}</div>
             <div class="text-uppercase">Your Shopping Partner</div>
             <br>
             <div class="text-uppercase">{{ strtoupper($receipt->address) }}</div>
-            <div class="text-uppercase">HP: {{ $receipt->hp }}</div>
+
+            <div class="text-uppercase">HP: {{ $formattedHp }}</div>
         </div>
 
         <div class="dashed"></div>
@@ -178,23 +189,25 @@
             </tr>
         </table>
 
-        <table class="items-table mb-3" style="margin-bottom:0.5rem;">
-            <tr>
-                <td class="text-uppercase">MEMBER</td>
-                <td>:</td>
-                <td class="text-uppercase">{{ $receipt->member ?? 0 }}</td>
-            </tr>
-            <tr>
-                <td class="text-uppercase">NAMA</td>
-                <td>:</td>
-                <td class="text-uppercase">{{ $receipt->name_of_customer ?? '-' }}</td>
-            </tr>
-            <tr>
-                <td class="text-uppercase">PT.AKHIR</td>
-                <td>:</td>
-                <td class="text-uppercase">{{ $receipt->pt_akhir ?? 0 }}</td>
-            </tr>
-        </table>
+        @if ($receipt->member == null || $receipt->name_of_customer == null || receipt->pt_akhir == null)
+            <table class="items-table mb-3" style="margin-bottom:0.5rem;">
+                <tr>
+                    <td class="text-uppercase">MEMBER</td>
+                    <td>:</td>
+                    <td class="text-uppercase">{{ $receipt->member ?? 0 }}</td>
+                </tr>
+                <tr>
+                    <td class="text-uppercase">NAMA</td>
+                    <td>:</td>
+                    <td class="text-uppercase">{{ $receipt->name_of_customer ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <td class="text-uppercase">PT.AKHIR</td>
+                    <td>:</td>
+                    <td class="text-uppercase">{{ $receipt->pt_akhir ?? 0 }}</td>
+                </tr>
+            </table>
+        @endif
 
         <div class="footer" style="margin-bottom:0.5rem;">
             <p>-= TERIMA KASIH ATAS KUNJUNGAN ANDA =-</p>
@@ -210,11 +223,13 @@
                     {{ \Carbon\Carbon::parse($receipt->time_transaction)->format('d.m.Y') }}
                     [{{ \Carbon\Carbon::parse($receipt->time_transaction)->format('H:i') }}]</td>
             </tr>
-            <tr>
-                <td class="text-uppercase">MEMBER</td>
-                <td>:</td>
-                <td colspan="2" class="text-uppercase">{{ $receipt->name_of_customer ?? '-' }}</td>
-            </tr>
+            @if ($receipt->name_of_customer == null)
+                <tr>
+                    <td class="text-uppercase">MEMBER</td>
+                    <td>:</td>
+                    <td colspan="2" class="text-uppercase">{{ $receipt->name_of_customer }}</td>
+                </tr>
+            @endif
         </table>
         <div class="dashed"></div>
         <table class="items-table">

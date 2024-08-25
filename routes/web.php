@@ -7,7 +7,7 @@ use App\Http\Controllers\Auth\LoginController;
 
 //Namespace Admin
 use App\Http\Controllers\Admin\AdminController;
-
+use App\Http\Controllers\ProductController;
 //Namespace User
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\ProfileController;
@@ -53,6 +53,11 @@ Route::group(['namespace' => 'Admin', 'middleware' => 'auth', 'prefix' => 'admin
 	Route::get('/receipts/create', [ReceiptController::class, 'create'])->name('receipts.create');
 	Route::post('/receipts', [ReceiptController::class, 'store'])->name('receipts.store');
 	Route::get('/receipts/{id}', [ReceiptController::class, 'show'])->name('receipts.show');
+
+	Route::get('/product', [ProductController::class, 'index'])->name('product.index');
+	Route::get('/product/create', [ProductController::class, 'create'])->name('product.create');
+	Route::post('/product', [ProductController::class, 'store'])->name('product.store');
+	Route::delete('/product/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
 
 	Route::get('/download-receipt/{id}', [ReceiptController::class, 'downloadReceipt'])->name('receipts.download');
 });

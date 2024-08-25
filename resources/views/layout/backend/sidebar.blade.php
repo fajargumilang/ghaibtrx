@@ -49,7 +49,7 @@
                 <i class="fas fa-fw fa-table"></i>
                 <span>Master Data</span>
             </a>
-            <div id="collapseOne" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div id="collapseOne" class="collapse" aria-labelledby="c" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <a class="collapse-item" href="{{ route('user.index') }}">User</a>
                 </div>
@@ -63,13 +63,28 @@
             <i class="fas fa-fw fa-table"></i>
             <span>Receipt Print</span>
         </a>
-        <div id="Print" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="Print" class="collapse" aria-labelledby="c" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item" href="{{ route('receipts.index') }}">Receipt Print</a>
             </div>
         </div>
     </li>
 
+    <div class="sidebar-heading">
+        Master Data Product
+    </div>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#productOne"
+            aria-expanded="true" aria-controls="productOne">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Product</span>
+        </a>
+        <div id="productOne" class="collapse" aria-labelledby="collapseTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item" href="{{ route('product.index') }}">Product</a>
+            </div>
+        </div>
+    </li>
     <!-- Nav Item - Pages Collapse Menu -->
     {{-- <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
