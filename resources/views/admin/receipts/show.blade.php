@@ -5,7 +5,7 @@
 @push('css')
     <style>
         body {
-            font-family: 'Courier ', Courier, monospace;
+            font-family: 'Courier', Courier, monospace;
             color: #000;
         }
 
@@ -144,7 +144,7 @@
         @endphp
         <table class="items-table">
             <tr>
-                <td class="text-uppercase">Item : {{ $totalItems }}</td>
+                <td class="">Item : {{ $totalItems }}</td>
                 <td class="">TOTAL</td>
                 <td class="">:Rp </td>
                 <td class="float-right"> {{ number_format($receipt->total_amount, 0, ',', '.') }} </td>
@@ -156,7 +156,7 @@
                 <td class="float-right"> {{ number_format($receipt->uang_tunai, 0, ',', '.') }} </td>
             </tr>
             <tr>
-                <td class="text-uppercase">Qty : {{ $totalQuantity }}</td>
+                <td class="">Qty : {{ $totalQuantity }}</td>
                 <td class="">KEMBALI</td>
                 <td class="">:Rp</td>
                 <td class="float-right"> {{ number_format($kembalian, 0, ',', '.') }} </td>

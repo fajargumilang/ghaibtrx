@@ -5,10 +5,17 @@
     <style>
         html,
         body {
+
             height: 100%;
             margin: 0;
             padding: 0;
+            font-family: 'Courier', Courier, monospace;
+
+            color: #000;
+            margin: 0;
+            padding: 0;
         }
+
 
         .text-uppercase {
             text-transform: uppercase;
@@ -38,13 +45,7 @@
             /* Remove padding if causing extra space */
         }
 
-        body {
-            font-family: 'Courier', Courier, monospace;
 
-            color: #000;
-            margin: 0;
-            padding: 0;
-        }
 
         .receipt-container {
             /* Ukuran 80mm */
@@ -161,7 +162,7 @@
 
         <table class="items-table" style="margin-bottom:0.5rem;">
             <tr>
-                <td class="text-uppercase">Item : {{ $totalItems }}</td>
+                <td class="">Item : {{ $totalItems }}</td>
                 <td class="" style="text-align: left;">TOTAL</td>
                 <td class="" style="text-align: left;">:Rp</td>
                 <td class="text-right" style="text-align: right;">
@@ -175,7 +176,7 @@
                     {{ number_format($receipt->uang_tunai, 0, ',', '.') }}</td>
             </tr>
             <tr>
-                <td class="text-uppercase">Qty : {{ $totalQuantity }}</td>
+                <td class="">Qty : {{ $totalQuantity }}</td>
                 <td class="" style="text-align: left;">KEMBALI</td>
                 <td class="" style="text-align: left;">:Rp</td>
                 <td class="text-right" style="text-align: right;">

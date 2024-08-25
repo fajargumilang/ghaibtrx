@@ -186,6 +186,7 @@ class ReceiptController extends Controller
 
         // Muat view dan render ke string
         $html = view('receipt', $data)->render();
+        echo ($html);
 
         // Tulis HTML ke PDF
         $mpdf->WriteHTML($html);

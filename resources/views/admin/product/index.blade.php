@@ -28,7 +28,7 @@
         <div class="card-header">
             <!-- Button trigger modal -->
             <a href="{{ route('product.create') }}" class="btn btn-primary">
-                Create Receipt
+                Create Product
             </a>
 
         </div>
