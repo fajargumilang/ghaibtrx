@@ -235,7 +235,7 @@
                 success: function() {
                     $("#destroy-modal").modal("hide");
                     $('.data-table').DataTable().ajax.reload();
-                    flash('success', 'Data berhasil dihapus');
+                    flash('success', response.success);
                 },
                 error: function(xhr) {
                     //salert('Error', xhr.responseJSON.error);
