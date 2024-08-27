@@ -170,24 +170,26 @@
             </tr>
         </table>
 
-        <table class="items-table mb-3">
-            <tr>
-                <td class="text-uppercase">MEMBER</td>
-                <td class=""> :</td>
-                <td class="text-uppercase"> {{ $receipt->member ?? 0 }}</td>
-            </tr>
-            <tr>
-                <td class="text-uppercase">NAMA </td>
-                <td class=""> :</td>
-                <td class="text-uppercase"> {{ $receipt->name_of_customer ?? '-' }}</td>
+        @if ($receipt->member == !null || $receipt->name_of_customer == !null || $receipt->pt_akhir == !null)
+            <table class="items-table mb-3">
+                <tr>
+                    <td class="text-uppercase">MEMBER</td>
+                    <td class=""> :</td>
+                    <td class="text-uppercase"> {{ $receipt->member ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <td class="text-uppercase">NAMA </td>
+                    <td class=""> :</td>
+                    <td class="text-uppercase"> {{ $receipt->name_of_customer ?? '-' }}</td>
 
-            </tr>
-            <tr>
-                <td class="text-uppercase">PT.AKHIR </td>
-                <td>:</td>
-                <td class="text-uppercase">{{ $receipt->pt_akhir ?? 0 }}</td>
-            </tr>
-        </table>
+                </tr>
+                <tr>
+                    <td class="text-uppercase">PT.AKHIR </td>
+                    <td>:</td>
+                    <td class="text-uppercase">{{ $receipt->pt_akhir ?? '-' }}</td>
+                </tr>
+            </table>
+        @endif
 
         <div class="footer">
             <p>-=TERIMA KASIH ATAS KUNJUNGAN ANDA=-</p>
@@ -207,7 +209,7 @@
                     [{{ \Carbon\Carbon::parse($receipt->time_transaction)->format('H:i') }}]
                 </td>
             </tr>
-            @if ($receipt->name_of_customer == null)
+            @if ($receipt->name_of_customer == !null)
                 <tr>
                     <td class="text-uppercase">MEMBER </td>
                     <td class="">:</td>
