@@ -233,8 +233,8 @@
                 url: "product/" + id,
                 method: "DELETE",
                 success: function() {
-                    $("#destroy-modal").modal("hide");
                     $('.data-table').DataTable().ajax.reload();
+                    $("#destroy-modal").modal("hide");
                     flash('success', response.success);
                 },
                 error: function(xhr) {
