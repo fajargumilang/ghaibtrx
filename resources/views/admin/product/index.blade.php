@@ -235,7 +235,7 @@
                 success: function() {
                     $('.data-table').DataTable().ajax.reload();
                     $("#destroy-modal").modal("hide");
-                    flash('success', response.success);
+                    flash('success', 'Product Delete Successfully');
                 },
                 error: function(xhr) {
                     //salert('Error', xhr.responseJSON.error);
