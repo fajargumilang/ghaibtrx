@@ -80,7 +80,7 @@ class ProductController extends Controller
         $product->delete();
 
         // Jika berhasil, kembalikan response sukses
-        return response()->json(['success' => 'Data berhasil dihapus']);
+        return response()->json(['success' => 'Product ' . $product->name . ' deleted successfully']);
     }
 
     public function edit($id)
