@@ -59,6 +59,9 @@
                                 <td>{{ ucfirst($receipt->payment_method) }}</td>
                                 <td>{{ $receipt->created_at->format('Y-m-d H:i') }}</td>
                                 <td>
+                                    <a href="{{ route('receipts.edit', $receipt->id) }}"
+                                        class="btn btn-success btn-sm">Edit</a>
+
                                     <a href="{{ route('receipts.show', $receipt->id) }}"
                                         class="btn btn-primary btn-sm">View</a>
                                 </td>

@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::view('/', 'welcome');
+// Route::view('/', 'auth.login')->name('login');
 
 
 Route::group(['namespace' => 'Admin', 'middleware' => 'auth', 'prefix' => 'admin'], function () {
@@ -50,6 +51,9 @@ Route::group(['namespace' => 'Admin', 'middleware' => 'auth', 'prefix' => 'admin
 	Route::view('/tables', 'admin.tables')->name('tables');
 
 	Route::get('/receipts', [ReceiptController::class, 'index'])->name('receipts.index');
+	Route::get('/receipts/edit/{id}', [ReceiptController::class, 'edit'])->name('receipts.edit');
+	Route::put('/receipts/update/{id}', [ReceiptController::class, 'update'])->name('receipts.update');
+
 	Route::get('/receipts/create', [ReceiptController::class, 'create'])->name('receipts.create');
 	Route::post('/receipts', [ReceiptController::class, 'store'])->name('receipts.store');
 	Route::get('/receipts/{id}', [ReceiptController::class, 'show'])->name('receipts.show');

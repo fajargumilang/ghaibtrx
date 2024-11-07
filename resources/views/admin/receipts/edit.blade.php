@@ -1,6 +1,6 @@
 @extends('layout.backend.app', [
-    'title' => 'Create Receipt Print',
-    'pageTitle' => 'Create Receipt Print',
+    'title' => 'Edit Receipt Print',
+    'pageTitle' => 'Edit Receipt Print',
 ])
 
 @push('css')
@@ -23,37 +23,34 @@
             </div>
         </div>
     @endif
+
     <div class="card">
         <div class="card-body">
-
-            <form id="payment-form" action="{{ route('receipts.store') }}" method="POST">
+            <form id="payment-form" action="{{ route('receipts.update', $receipt->id) }}" method="POST">
                 @csrf
+                @method('PUT')
+
 
                 <div class="row">
                     <!-- Form Column -->
                     <div class="col-md-6">
-                        <h5>
-                            <strong>Store Data </strong>
-                        </h5>
+                        <h5><strong>Store Data</strong></h5>
                         <hr>
                         <div class="row">
                             <div class="form-group col-6">
                                 <label for="store_name">Store Name:</label>
                                 <input type="text" class="form-control @error('store_name') is-invalid @enderror"
-                                    id="store_name" name="store_name" placeholder="ex: SOLO SWA"
-                                    value="{{ old('store_name') }}">
+                                    id="store_name" name="store_name" value="{{ old('store_name', $receipt->store_name) }}">
                                 @error('store_name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
-
                             </div>
                             <div class="form-group col-6">
                                 <label for="address">Address:</label>
-                                <input type="text" class="form-control  @error('address') is-invalid @enderror"
-                                    id="address" name="address" placeholder="ex: JL.  JEND.  SUDIRMAN -  BERAU"
-                                    value="{{ old('address') }}">
+                                <input type="text" class="form-control @error('address') is-invalid @enderror"
+                                    id="address" name="address" value="{{ old('address', $receipt->address) }}">
                                 @error('address')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -63,7 +60,7 @@
                             <div class="form-group col-6">
                                 <label for="hp">HP:</label>
                                 <input type="number" class="form-control  @error('hp') is-invalid @enderror" id="hp"
-                                    name="hp" placeholder="ex: 0812 8888 1111" value="{{ old('hp') }}">
+                                    name="hp" placeholder="ex: 0812 8888 1111" value="{{ old('hp', $receipt->hp) }}">
                                 @error('hp')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -73,17 +70,20 @@
                             <div class="form-group col-6">
                                 <label for="trans">Trans:</label>
                                 <input type="number" class="form-control  @error('trans') is-invalid @enderror"
-                                    id="trans" name="trans" placeholder="ex: 1155509001" value="{{ old('trans') }}">
+                                    id="trans" name="trans" placeholder="ex: 1155509001"
+                                    value="{{ old('trans', $receipt->trans) }}">
                                 @error('trans')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
+
                             <div class="form-group col-6">
                                 <label for="kassa">Kassa:</label>
                                 <input type="number" class="form-control  @error('kassa') is-invalid @enderror"
-                                    id="kassa" name="kassa" placeholder="ex: 003" value="{{ old('kassa') }}">
+                                    id="kassa" name="kassa" placeholder="ex: 003"
+                                    value="{{ old('kassa', $receipt->kassa) }}">
                                 @error('kassa')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -95,7 +95,7 @@
                                 <label for="name_of_kassa">Name of Kassa:</label>
                                 <input type="text" class="form-control  @error('name_of_kassa') is-invalid @enderror"
                                     id="name_of_kassa" name="name_of_kassa" placeholder="ex: NURUL QOMARI"
-                                    value="{{ old('name_of_kassa') }}">
+                                    value="{{ old('name_of_kassa', $receipt->name_of_kassa) }}">
                                 @error('name_of_kassa')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -105,9 +105,11 @@
 
                             <div class="form-group col-6">
                                 <label for="time_transaction">Time Transaction:</label>
-                                <input type="time" class="form-control  @error('time_transaction') is-invalid @enderror"
-                                    id="time_transaction" name="time_transaction" value="" placeholder="ex: 11:55"
-                                    value="{{ old('time_transaction') }}">
+                                <input type="time" class="form-control @error('time_transaction') is-invalid @enderror"
+                                    id="time_transaction" name="time_transaction"
+                                    value="{{ old('time_transaction', \Carbon\Carbon::parse($receipt->time_transaction)->format('H:i')) }}"
+                                    placeholder="ex: 11:55">
+
                                 @error('time_transaction')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -118,31 +120,26 @@
 
                         <hr>
                         <div class="row">
-                            <div class=" col-12">
-                                <h5>
-                                    <strong>Informations - (Optional)</strong>
-                                </h5>
+                            <div class="col-12">
+                                <h5><strong>Informations - (Optional)</strong></h5>
                                 <hr>
                             </div>
-
                             <div class="form-group col-6">
                                 <label for="member">Member:</label>
-                                <input type="text" class="form-control  @error('member') is-invalid @enderror"
-                                    id="member" name="member" placeholder="ex: M/SLO1190900247"
-                                    value="{{ old('member') }}">
+                                <input type="text" class="form-control @error('member') is-invalid @enderror"
+                                    id="member" name="member" value="{{ old('member', $receipt->member) }}">
                                 @error('member')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
-                          
                             <div class="form-group col-6">
                                 <label for="name_of_customer">Name of Customer:</label>
                                 <input type="text"
                                     class="form-control  @error('name_of_customer') is-invalid @enderror"
                                     id="name_of_customer" name="name_of_customer" placeholder="ex: VAHYU VANNY HERTANTO"
-                                    value="{{ old('name_of_customer') }}">
+                                    value="{{ old('name_of_customer', $receipt->name_of_customer) }}">
                                 @error('name_of_customer')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -153,50 +150,47 @@
                                 <label for="pt_akhir">PT Akhir:</label>
                                 <input type="text" class="form-control  @error('pt_akhir') is-invalid @enderror"
                                     id="pt_akhir" name="pt_akhir" placeholder="ex: 477 Point"
-                                    value="{{ old('pt_akhir') }}">
+                                    value="{{ old('pt_akhir', $receipt->pt_akhir) }}">
                                 @error('pt_akhir')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
-
                         </div>
+
                         <hr>
                         <div class="row">
-                            <div class=" col-12">
-                                <h5>
-                                    <strong>Payment </strong>
-                                </h5>
+                            <div class="col-12">
+                                <h5><strong>Payment</strong></h5>
                                 <hr>
                             </div>
-
-
                             <div class="form-group col-6">
                                 <label for="paymentMethod">Payment Method:</label>
                                 <select class="form-control @error('payment_method') is-invalid @enderror"
                                     id="paymentMethod" name="payment_method">
                                     <option value="">-= Select Payment Method =-</option>
-                                    <option value="cash" {{ old('payment_method') == 'cash' ? 'selected' : '' }}>Cash
-                                    </option>
-                                    <option value="card" {{ old('payment_method') == 'card' ? 'selected' : '' }}>Card
-                                    </option>
-                                    <option value="online" {{ old('payment_method') == 'online' ? 'selected' : '' }}>
+                                    <option value="cash"
+                                        {{ old('payment_method', $receipt->payment_method) == 'cash' ? 'selected' : '' }}>
+                                        Cash</option>
+                                    <option value="card"
+                                        {{ old('payment_method', $receipt->payment_method) == 'card' ? 'selected' : '' }}>
+                                        Card</option>
+                                    <option value="online"
+                                        {{ old('payment_method', $receipt->payment_method) == 'online' ? 'selected' : '' }}>
                                         Online</option>
                                 </select>
-
                                 @error('payment_method')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
-                          
                             <div class="form-group col-6">
                                 <label for="anda_hemat">Anda Hemat : - (Optional)</label>
                                 <input type="number" class="form-control  @error('anda_hemat') is-invalid @enderror"
                                     id="anda_hemat" name="anda_hemat" placeholder="ex: 500.000"
-                                    value="{{ old('anda_hemat') }}">
+                                    value="{{ old('anda_hemat', $receipt->anda_hemat) }}">
                                 @error('anda_hemat')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -208,106 +202,91 @@
                                 <label for="total_price">Total Price:</label>
                                 <input type="text" class="form-control @error('total_price') is-invalid @enderror"
                                     id="total_price" name="total_price" placeholder="ex: 0"
-                                    value="{{ old('total_price') }}" readonly>
+                                    value="{{ old('total_price', $receipt->final_amount) }}" readonly>
                             </div>
 
                             <div class="form-group col-6">
                                 <label for="uang_tunai">Payment :</label>
                                 <input type="number" class="form-control  @error('uang_tunai') is-invalid @enderror"
                                     id="uang_tunai" name="uang_tunai" placeholder="ex: 500.000"
-                                    value="{{ old('uang_tunai') }}">
+                                    value="{{ old('uang_tunai', $receipt->uang_tunai) }}">
                                 @error('uang_tunai')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
-
                         </div>
                     </div>
+
                     <div class="col-md-6">
                         <h5><strong>Product</strong></h5>
                         <hr>
 
                         <div id="product-fields">
-                            <div class="product-group">
-                                <div class="row">
-                                    <div class="form-group col-4">
-                                        <label for="product_name">[1] Product Name:</label>
-                                        <select class="select2 form-control product-select" name="product_name[]"
-                                            placeholder="ex: Enter product name">
-                                            <option value="">-= Select Product</option>
-                                            @foreach ($products as $product)
-                                                <option value="{{ $product->name }}" data-price="{{ $product->price }}">
-                                                    {{ $product->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('product_name.*')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
+                            @foreach ($receipt->items as $index => $item)
+                                <div class="product-group">
+                                    <div class="row">
+                                        <div class="form-group col-4">
+                                            <label for="product_name">[{{ $index + 1 }}] Product Name:</label>
+                                            <select class="select2 form-control product-select" name="product_name[]">
+                                                <option value="">-= Select Product =-</option>
+                                                @foreach ($products as $prod)
+                                                    <option value="{{ $prod->name }}" data-price="{{ $prod->price }}"
+                                                        {{ $item->product_name == $prod->name ? 'selected' : '' }}>
+                                                        {{ $prod->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error("product_name.$index")
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
 
-                                    <div class="form-group col-4">
-                                        <label for="price">Price:</label>
-                                        <input type="text" class="form-control price-input" name="price[]"
-                                            placeholder="ex: 10000" readonly>
-                                        @error('price.*')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
+                                        <div class="form-group col-4">
+                                            <label for="price">Price:</label>
+                                            <input type="text" class="form-control price-input" name="price[]"
+                                                data-original-price="{{ $item->price }}"
+                                                data-index="{{ $index }}"
+                                                value="{{ number_format(old("price.$index", $item->price), 0, ',', '.') }}"
+                                                readonly>
+                                        </div>
 
-                                    <div class="form-group col-4">
-                                        <label for="quantity">Quantity:</label>
-                                        <input type="number" class="form-control quantity-input" id="quantity"
-                                            name="quantity[]" placeholder="ex: 3">
-                                        @error('quantity.*')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <div class="col-12 mb-3">
-                                        <hr>
-                                        <button type="button"
-                                            class="float-right btn btn-danger remove-field">Remove</button>
-                                    </div>
+                                        <div class="form-group col-4">
+                                            <label for="quantity">Quantity:</label>
+                                            <input type="number" class="form-control quantity-input" name="quantity[]"
+                                                data-index="{{ $index }}" min="1"
+                                                value="{{ old("quantity.$index", $item->quantity) }}"
+                                                onchange="updatePrice(this)">
+                                        </div>
 
-                                    <hr>
+                                        <div class="col-12 mb-3">
+                                            <hr>
+                                            <button type="button"
+                                                class="float-right btn btn-danger remove-field">Remove</button>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            @endforeach
                         </div>
 
                         <button type="button" id="add-field" class="btn btn-info">Add Field</button>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+
+                <button type="submit" class="btn btn-primary">Update</button>
                 <a href="{{ route('receipts.index') }}" class="btn btn-danger">Back</a>
             </form>
         </div>
     </div>
 @endsection
 
-{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.7-beta.15/jquery.inputmask.min.js"></script> --}}
 @push('js')
-    {{-- CLONE FIELD PRODUCT, PRICE, QTY --}}
-
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function() {
-            // Menggunakan jQuery untuk memudahkan pemilihan elemen dan manipulasi DOM
-            $(document).on('change', '.product-select', function() {
-                // Menyimpan referensi ke elemen yang berubah
-                var $select = $(this);
-                var $priceInput = $select.closest('.form-group').next('.form-group').find('.price-input');
-
-                // Mendapatkan harga dari opsi yang dipilih
-                var selectedOption = $select.find('option:selected');
-                var price = selectedOption.data('price');
-
-                // Memperbarui input harga
-                $priceInput.val(price || '');
-            });
+            // Similar JavaScript as in create.blade.php for handling dynamic fields
         });
     </script>
-
 
     <script>
         $(document).ready(function() {
@@ -344,6 +323,17 @@
 
             // Calculate total price on input change
             $(document).on('input', '.price-input, .quantity-input', function() {
+                calculateTotalPrice();
+            });
+
+            // Update price when product is selected
+            $(document).on('change', '.product-select', function() {
+                let selectedOption = $(this).find('option:selected');
+                let price = selectedOption.data('price') || 0;
+                let priceInput = $(this).closest('.product-group').find('.price-input');
+
+                priceInput.val(price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
+
                 calculateTotalPrice();
             });
 
@@ -390,26 +380,18 @@
 
             // Handle form submission
             $('#payment-form').submit(function(event) {
-                // Prevent default form submission
                 event.preventDefault();
-
-                // Calculate total price
                 calculateTotalPrice();
 
-                // Get the available cash
                 let uangTunai = $('#uang_tunai').val().replace(/\./g, '').replace(/[^0-9]/g, '');
                 uangTunai = isNaN(uangTunai) ? 0 : parseInt(uangTunai);
 
-                // Get the total price
                 let totalPrice = $('#total_price').val().replace(/\./g, '').replace(/[^0-9]/g, '');
                 totalPrice = isNaN(totalPrice) ? 0 : parseInt(totalPrice);
 
-                // Check if total price exceeds available cash
                 if (totalPrice > uangTunai) {
                     alert("Total price cannot exceed payment amount.");
                 } else {
-                    // If valid, you can submit the form or perform the necessary action
-                    // Uncomment the following line to actually submit the form
                     $(this).off('submit').submit();
                 }
             });

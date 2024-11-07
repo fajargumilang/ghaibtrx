@@ -38,6 +38,97 @@ class ReceiptController extends Controller
         return view('admin.receipts.index', compact('receipts'));
     }
 
+    public function edit($id)
+    {
+        $receipt = Receipt::with('items')->findOrFail($id);
+        $products = Product::all();
+
+        return view('admin.receipts.edit', compact('receipt', 'products'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'payment_method' => 'required',
+            'store_name' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'hp' => 'required|string|max:15',
+            'trans' => 'required|numeric',
+            'kassa' => 'required|string|max:255',
+            'time_transaction' => 'required|date_format:H:i',
+            'anda_hemat' => 'nullable|string|max:15',
+            // Informations
+            'name_of_kassa' => 'required|string|max:255',
+            'uang_tunai' => 'required|string|max:255',
+
+            'member' => 'nullable|string|max:255',
+            'name_of_customer' => 'nullable|string|max:255',
+            'pt_akhir' => 'nullable|string|max:255',
+            // Product details
+            'product_name.*' => 'required|string|max:255',
+            'price.*' => 'required|numeric|min:0',
+            'quantity.*' => 'required|integer|min:1',
+        ]);
+
+        $receipt = Receipt::findOrFail($id);
+        $receipt->update([
+            'receipt_number' => $this->generateUniqueReceiptNumber(),
+            'store_name' => $request->store_name,
+            'address' => $request->address,
+            'hp' => $request->hp,
+            'trans' => $request->trans,
+            'kassa' => $request->kassa,
+            'time_transaction' => $request->time_transaction,
+            'member' => $request->member,
+            'name_of_kassa' => $request->name_of_kassa,
+            'name_of_customer' => $request->name_of_customer,
+            'pt_akhir' => $request->pt_akhir,
+            'payment_method' => $request->payment_method,
+            'uang_tunai' => $request->uang_tunai,
+            'anda_hemat' => $request->anda_hemat,
+        ]);
+
+        $receiptItems = ReceiptItem::where('receipt_id', $id)->get();
+        $totalAmount = 0;
+
+        foreach ($receiptItems as $key => $item) {
+            $product = Product::where('name', $request->product_name[$key])->first();
+
+            if ($product) {
+                $calculatedPrice = $product->price * $request->quantity[$key];
+
+                // Update item dengan harga yang telah dihitung ulang
+                $item->update([
+                    'product_name' => $request->product_name[$key],
+                    'quantity' => $request->quantity[$key],
+                    'price' => $product->price,
+                    'total_price' => $calculatedPrice,
+                ]);
+
+                // Tambahkan total_price item ke totalAmount
+                $totalAmount += $calculatedPrice;
+            }
+        }
+
+        $discount = $request->discount ?? 0;
+        $tax = $request->tax ?? 0;
+
+        // Hitung diskon dan pajak berdasarkan totalAmount
+        $discountCalculate = $discount > 0 ? ($totalAmount * $discount / 100) : 0;
+        $taxCalculate = $tax > 0 ? ($totalAmount * $tax / 100) : 0;
+
+        // Hitung finalAmount setelah mengurangi diskon dan menambah pajak
+        $finalAmount = ($totalAmount - $discountCalculate) + $taxCalculate;
+
+        $receipt->update([
+            'total_amount' => $totalAmount,
+            'discount' => $discount,
+            'tax' => $tax,
+            'final_amount' => $finalAmount,
+        ]);
+        return redirect()->route('receipts.index')->with('success', 'Receipt updated successfully.');
+    }
+
     public function create()
     {
         $products = Product::all();
@@ -75,7 +166,6 @@ class ReceiptController extends Controller
                 'product_name.*' => 'required|string|max:255',
                 'price.*' => 'required|numeric|min:0',
                 'quantity.*' => 'required|integer|min:1',
-
             ]);
 
             // Buat receipt terlebih dahulu untuk mendapatkan receipt_id
