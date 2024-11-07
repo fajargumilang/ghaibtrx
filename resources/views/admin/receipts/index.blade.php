@@ -57,7 +57,10 @@
                                 <td>Rp {{ number_format($receipt->tax, 2) }}</td>
                                 <td>Rp {{ number_format($receipt->final_amount, 2) }}</td>
                                 <td>{{ ucfirst($receipt->payment_method) }}</td>
-                                <td>{{ $receipt->created_at->format('Y-m-d H:i') }}</td>
+                                <td>
+                                    {{ $receipt->tanggal && $receipt->time_transaction ? \Carbon\Carbon::parse($receipt->tanggal)->format('d-m-Y') . ' ' . \Carbon\Carbon::parse($receipt->time_transaction)->format('H:i') : $receipt->created_at->format('d-m-Y H:i') }}
+                                </td>
+
                                 <td>
                                     <a href="{{ route('receipts.edit', $receipt->id) }}"
                                         class="btn btn-success btn-sm">Edit</a>

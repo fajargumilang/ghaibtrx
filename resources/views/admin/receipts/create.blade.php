@@ -104,6 +104,17 @@
                             </div>
 
                             <div class="form-group col-6">
+                                <label for="tanggal">Tanggal:</label>
+                                <input type="date" class="form-control  @error('tanggal') is-invalid @enderror"
+                                    id="tanggal" name="tanggal" value="" value="{{ old('tanggal') }}">
+                                @error('tanggal')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            
+                            <div class="form-group col-6">
                                 <label for="time_transaction">Time Transaction:</label>
                                 <input type="time" class="form-control  @error('time_transaction') is-invalid @enderror"
                                     id="time_transaction" name="time_transaction" value="" placeholder="ex: 11:55"
@@ -136,7 +147,7 @@
                                     </span>
                                 @enderror
                             </div>
-                          
+
                             <div class="form-group col-6">
                                 <label for="name_of_customer">Name of Customer:</label>
                                 <input type="text"
@@ -191,7 +202,7 @@
                                     </span>
                                 @enderror
                             </div>
-                          
+
                             <div class="form-group col-6">
                                 <label for="anda_hemat">Anda Hemat : - (Optional)</label>
                                 <input type="number" class="form-control  @error('anda_hemat') is-invalid @enderror"

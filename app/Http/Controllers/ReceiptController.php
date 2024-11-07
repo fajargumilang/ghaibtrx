@@ -56,6 +56,7 @@ class ReceiptController extends Controller
             'trans' => 'required|numeric',
             'kassa' => 'required|string|max:255',
             'time_transaction' => 'required|date_format:H:i',
+            'tanggal' => 'required|date',
             'anda_hemat' => 'nullable|string|max:15',
             // Informations
             'name_of_kassa' => 'required|string|max:255',
@@ -73,6 +74,7 @@ class ReceiptController extends Controller
         $receipt = Receipt::findOrFail($id);
         $receipt->update([
             'receipt_number' => $this->generateUniqueReceiptNumber(),
+            'tanggal' => $request->tanggal,
             'store_name' => $request->store_name,
             'address' => $request->address,
             'hp' => $request->hp,
@@ -87,7 +89,6 @@ class ReceiptController extends Controller
             'uang_tunai' => $request->uang_tunai,
             'anda_hemat' => $request->anda_hemat,
         ]);
-
         $receiptItems = ReceiptItem::where('receipt_id', $id)->get();
         $totalAmount = 0;
 
@@ -154,6 +155,7 @@ class ReceiptController extends Controller
                 'trans' => 'required|numeric',
                 'kassa' => 'required|string|max:255',
                 'time_transaction' => 'required|date_format:H:i',
+                'tanggal' => 'required|date',
                 'anda_hemat' => 'nullable|string|max:15',
                 // Informations
                 'name_of_kassa' => 'required|string|max:255',
@@ -172,6 +174,7 @@ class ReceiptController extends Controller
             $receipt = Receipt::create([
                 'receipt_number' => $this->generateUniqueReceiptNumber(),
                 'store_name' => $request->store_name,
+                'tanggal' => $request->tanggal,
                 'address' => $request->address,
                 'hp' => $request->hp,
                 'trans' => $request->trans,
@@ -186,6 +189,7 @@ class ReceiptController extends Controller
                 'anda_hemat' => $request->anda_hemat,
                 // 'total_amount' dan 'final_amount' akan di-update setelah loop
             ]);
+
 
             $totalAmount = 0; // Inisialisasi total amount
             foreach ($request->product_name as $index => $name) {

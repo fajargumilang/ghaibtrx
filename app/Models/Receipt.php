@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Receipt extends Model
 {
     protected $fillable = [
+        'tanggal',
         'store_name',
         'address',
         'hp',

@@ -1,6 +1,10 @@
 @extends('layout.backend.app', [
     'title' => 'Receipt View',
 ])
+@php
+    use Carbon\Carbon;
+@endphp
+
 
 @push('css')
     <style>
@@ -105,12 +109,11 @@
             <div class="text-uppercase">{{ strtoupper($receipt->address) }}</div>
             <div class="text-uppercase">HP: {{ $receipt->hp }}</div>
         </div>
-
         <div class="dashed"></div>
         <div class="under-header">
             <div class="text-uppercase">TRANS: {{ $receipt->kassa }}-{{ $receipt->trans }}</div>
             <div class="text-uppercase">KASSA:
-                {{ $receipt->kassa }}-{{ $receipt->name_of_kassa }}{{ \Carbon\Carbon::parse($receipt->time_transaction)->format('d.m.Y') }}
+                {{ $receipt->kassa }}-{{ $receipt->name_of_kassa }}{{ $receipt->tanggal ? \Carbon\Carbon::parse($receipt->tanggal)->format('d.m.Y') : '' }}
                 [{{ \Carbon\Carbon::parse($receipt->time_transaction)->format('H:i') }}]</div>
 
         </div>
