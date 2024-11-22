@@ -187,7 +187,8 @@
 
         <table class="items-table mb-2" style="margin-bottom:0.5rem;">
             <tr>
-                <td class="text-uppercase">ANDA HEMAT : RP {{ $receipt->anda_hemat ?? 0 }}</td>
+                <td class="text-uppercase">ANDA HEMAT : RP {{ number_format($receipt->anda_hemat, 0, ',', '.') }}
+                </td>
             </tr>
         </table>
 
