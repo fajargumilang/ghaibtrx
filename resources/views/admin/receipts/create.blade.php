@@ -113,7 +113,7 @@
                                     </span>
                                 @enderror
                             </div>
-                            
+
                             <div class="form-group col-6">
                                 <label for="time_transaction">Time Transaction:</label>
                                 <input type="time" class="form-control  @error('time_transaction') is-invalid @enderror"
@@ -243,7 +243,7 @@
                         <div id="product-fields">
                             <div class="product-group">
                                 <div class="row">
-                                    <div class="form-group col-4">
+                                    <div class="form-group col-lg-4 col-md-12 col-sm-12">
                                         <label for="product_name">[1] Product Name:</label>
                                         <select class="select2 form-control product-select" name="product_name[]"
                                             placeholder="ex: Enter product name">
@@ -259,7 +259,7 @@
                                         @enderror
                                     </div>
 
-                                    <div class="form-group col-4">
+                                    <div class="form-group col-lg-4 col-md-12 col-sm-12">
                                         <label for="price">Price:</label>
                                         <input type="text" class="form-control price-input" name="price[]"
                                             placeholder="ex: 10000" readonly>
@@ -268,7 +268,7 @@
                                         @enderror
                                     </div>
 
-                                    <div class="form-group col-4">
+                                    <div class="form-group col-lg-4 col-md-12 col-sm-12">
                                         <label for="quantity">Quantity:</label>
                                         <input type="number" class="form-control quantity-input" id="quantity"
                                             name="quantity[]" placeholder="ex: 3">
@@ -276,6 +276,7 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
+
                                     <div class="col-12 mb-3">
                                         <hr>
                                         <button type="button"
@@ -287,7 +288,7 @@
                             </div>
                         </div>
 
-                        <button type="button" id="add-field" class="btn btn-info">Add Field</button>
+                        <button type="button" id="add-field" class="mt-2 mb-2 btn btn-info">Add Field</button>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>

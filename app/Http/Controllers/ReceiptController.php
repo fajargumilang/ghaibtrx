@@ -69,9 +69,19 @@ class ReceiptController extends Controller
             'product_name.*' => 'required|string|max:255',
             'price.*' => 'required|numeric|min:0',
             'quantity.*' => 'required|integer|min:1',
+            // 'deleted_items' => 'nullable|array',
+            // 'deleted_items.*' => 'exists:receipt_items,id',
         ]);
 
+        $deletedItems = $request->input('deleted_items');
+        $deletedItems = json_decode($deletedItems, true); // Mengonversi string JSON menjadi array PHP
+        if (!empty($deletedItems)) {
+            ReceiptItem::whereIn('product_name', $deletedItems)->delete();
+        }
+
         $receipt = Receipt::findOrFail($id);
+        // Process the deleted items (if any)
+
         $receipt->update([
             'receipt_number' => $this->generateUniqueReceiptNumber(),
             'tanggal' => $request->tanggal,
@@ -89,24 +99,33 @@ class ReceiptController extends Controller
             'uang_tunai' => $request->uang_tunai,
             'anda_hemat' => $request->anda_hemat,
         ]);
+
         $receiptItems = ReceiptItem::where('receipt_id', $id)->get();
         $totalAmount = 0;
 
-        foreach ($receiptItems as $key => $item) {
-            $product = Product::where('name', $request->product_name[$key])->first();
+        foreach ($request->product_name as $key => $productName) {
+            $item = ReceiptItem::where('receipt_id', $id)
+                ->where('product_name', $productName)
+                ->first();
+
+            if (!$item) {
+                $item = new ReceiptItem(['receipt_id' => $id]);
+            }
+
+            $product = Product::where('name', $productName)->first();
 
             if ($product) {
                 $calculatedPrice = $product->price * $request->quantity[$key];
 
-                // Update item dengan harga yang telah dihitung ulang
-                $item->update([
-                    'product_name' => $request->product_name[$key],
+                $item->fill([
+                    'product_name' => $productName,
                     'quantity' => $request->quantity[$key],
                     'price' => $product->price,
                     'total_price' => $calculatedPrice,
                 ]);
 
-                // Tambahkan total_price item ke totalAmount
+                $item->save();
+
                 $totalAmount += $calculatedPrice;
             }
         }
@@ -127,7 +146,8 @@ class ReceiptController extends Controller
             'tax' => $tax,
             'final_amount' => $finalAmount,
         ]);
-        return redirect()->route('receipts.index')->with('success', 'Receipt updated successfully.');
+
+        return redirect()->route('receipts.index')->with('success', 'Receipt ' . $receipt->receipt_number . ' updated successfully.');
     }
 
     public function create()

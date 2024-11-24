@@ -239,7 +239,7 @@
                             @foreach ($receipt->items as $index => $item)
                                 <div class="product-group">
                                     <div class="row">
-                                        <div class="form-group col-4">
+                                        <div class="form-group col-lg-4 col-md-12 col-sm-12">
                                             <label for="product_name">[{{ $index + 1 }}] Product Name:</label>
                                             <select class="select2 form-control product-select" name="product_name[]">
                                                 <option value="">-= Select Product =-</option>
@@ -255,7 +255,7 @@
                                             @enderror
                                         </div>
 
-                                        <div class="form-group col-4">
+                                        <div class="form-group col-lg-4 col-md-12 col-sm-12">
                                             <label for="price">Price:</label>
                                             <input type="text" class="form-control price-input" name="price[]"
                                                 data-original-price="{{ $item->price }}"
@@ -264,7 +264,7 @@
                                                 readonly>
                                         </div>
 
-                                        <div class="form-group col-4">
+                                        <div class="form-group col-lg-4 col-md-12 col-sm-12">
                                             <label for="quantity">Quantity:</label>
                                             <input type="number" class="form-control quantity-input" name="quantity[]"
                                                 data-index="{{ $index }}" min="1"
@@ -276,11 +276,15 @@
                                             <hr>
                                             <button type="button"
                                                 class="float-right btn btn-danger remove-field">Remove</button>
+
+
                                         </div>
+
                                     </div>
                                 </div>
                             @endforeach
                         </div>
+                        <input type="hidden" id="deleted_items" name="deleted_items" value="[]">
 
                         <button type="button" id="add-field" class="btn btn-info">Add Field</button>
                     </div>
@@ -299,7 +303,33 @@
             // Similar JavaScript as in create.blade.php for handling dynamic fields
         });
     </script>
+    <script>
+        $(document).ready(function() {
+            // Tangani klik tombol "Remove"
+            $('.remove-field').click(function() {
+                var productGroup = $(this).closest(
+                    '.product-group'); // Ambil elemen .product-group yang berhubungan
+                var productName = productGroup.find('.product-select')
+                    .val(); // Ambil nilai dari select product_name
 
+                if (productName) {
+                    // Ambil nilai deleted_items yang sudah ada
+                    var deletedItems = JSON.parse($('#deleted_items')
+                        .val()); // Parse string JSON menjadi array
+
+                    // Masukkan nama produk yang dihapus ke dalam array
+                    deletedItems.push(productName); // Bisa juga menyimpan ID produk, tergantung kebutuhan
+
+                    // Update nilai input hidden deleted_items dengan array yang baru
+                    $('#deleted_items').val(JSON.stringify(
+                        deletedItems)); // Ubah array menjadi string JSON dan set ke input hidden
+                }
+
+                // Hapus elemen produk
+                productGroup.remove();
+            });
+        });
+    </script>
     <script>
         $(document).ready(function() {
             // Function to initialize Select2
@@ -366,6 +396,22 @@
                 $('#product-fields').append(newProductGroup);
                 updateRemoveButtonVisibility();
             });
+
+            let deletedItems = [];
+
+            function removeProduct(button) {
+                const productItem = button.closest('.product-group');
+                const productId = productItem.dataset.productId; // Get the product ID
+
+                // Add product ID to deletedItems array
+                deletedItems.push(productId);
+
+                // Update the hidden input field with the deleted items array
+                document.getElementById('deleted_items').value = JSON.stringify(deletedItems);
+
+                // Remove the product group from the UI
+                productItem.remove();
+            }
 
             // Function to remove fields
             $(document).on('click', '.remove-field', function() {
