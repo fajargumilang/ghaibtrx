@@ -34,7 +34,7 @@ Route::group(['namespace' => 'Admin', 'middleware' => 'auth', 'prefix' => 'admin
 	Route::get('/', [AdminController::class, 'index'])->name('admin')->middleware(['can:admin']);
 
 	//Route Rescource
-	Route::resource('/home', 'UserController')->middleware(['can:admin']);
+	Route::resource('/user', 'UserController')->middleware(['can:admin']);
 
 	//Route View
 
