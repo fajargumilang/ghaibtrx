@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Auth;
 */
 
 // Route::view('/', 'welcome');
+Route::view('/', 'auth.login')->name('logina');
 
 
 Route::group(['namespace' => 'Admin', 'middleware' => 'auth', 'prefix' => 'admin'], function () {
@@ -74,7 +75,7 @@ Route::group(['namespace' => 'User', 'middleware' => 'auth', 'prefix' => 'user']
 });
 
 Route::group(['namespace' => 'Auth', 'middleware' => 'guest'], function () {
-	Route::view('/', 'auth.login')->name('login');
+	Route::view('/login', 'auth.login')->name('login');
 	Route::post('/login', [LoginController::class, 'authenticate'])->name('login.post');
 });
 
