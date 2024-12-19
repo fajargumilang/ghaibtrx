@@ -43,7 +43,7 @@
                 <h1 class="display-4">Hello , {{ Auth::user()->name }}</h1>
             @endauth
 
-            <p class="lead">Website GHAIB ada didalamnnya!</p>
+            <p class="lead">Website GHAIB ada didalamnya!</p>
             <hr class="my-4">
 
 
