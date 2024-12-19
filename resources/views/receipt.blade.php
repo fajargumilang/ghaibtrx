@@ -223,7 +223,7 @@
                 <td class="text-uppercase">KASSA</td>
                 <td>:</td>
                 <td class="text-right text-uppercase" style="text-align: right;">
-                    {{ \Carbon\Carbon::parse($receipt->time_transaction)->format('d.m.y') }}
+                    {{ \Carbon\Carbon::parse($receipt->tanggal)->format('d.m.y') }}
                     [{{ \Carbon\Carbon::parse($receipt->time_transaction)->format('H:i') }}]</td>
             </tr>
             @if ($receipt->name_of_customer == !null)

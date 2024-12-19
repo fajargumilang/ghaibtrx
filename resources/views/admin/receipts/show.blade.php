@@ -110,7 +110,7 @@
         <div class="under-header">
             <div class="text-uppercase">TRANS: {{ $receipt->kassa }}-{{ $receipt->trans }}</div>
             <div class="text-uppercase">KASSA:
-                {{ $receipt->kassa }}-{{ $receipt->name_of_kassa }}{{ $receipt->time_transaction ? \Carbon\Carbon::parse($receipt->time_transaction)->format('d.m.Y') : ($receipt->time_transaction ? \Carbon\Carbon::parse($receipt->time_transaction)->format('d.m.Y') : '') }}
+                {{ $receipt->kassa }}-{{ $receipt->name_of_kassa }}{{ $receipt->tanggal ? \Carbon\Carbon::parse($receipt->tanggal)->format('d.m.Y') : ($receipt->time_transaction ? \Carbon\Carbon::parse($receipt->time_transaction)->format('d.m.Y') : '') }}
                 [{{ \Carbon\Carbon::parse($receipt->time_transaction)->format('H:i') }}]</div>
 
         </div>
@@ -204,7 +204,7 @@
                 <td class="">:</td>
                 <td></td>
                 <td class="float-right text-uppercase">
-                    {{ \Carbon\Carbon::parse($receipt->time_transaction)->format('d.m.y') }}
+                    {{ \Carbon\Carbon::parse($receipt->tanggal)->format('d.m.y') }}
 
                     [{{ \Carbon\Carbon::parse($receipt->time_transaction)->format('H:i') }}]
                 </td>
