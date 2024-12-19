@@ -26,8 +26,8 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-// Route::view('/', 'welcome');
-Route::view('/', 'auth.login')->name('logina');
+Route::view('/', 'welcome');
+// Route::view('/', 'auth.login')->name('logina');
 
 
 Route::group(['namespace' => 'Admin', 'middleware' => 'auth', 'prefix' => 'admin'], function () {
