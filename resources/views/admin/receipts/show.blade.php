@@ -186,7 +186,7 @@
                 <tr>
                     <td class="text-uppercase">PT.AKHIR </td>
                     <td>:</td>
-                    <td class="text-uppercase">{{ $receipt->pt_akhir ?? '-' }}</td>
+                    <td class="text-uppercase">{{ $receipt->pt_akhir ?? '-' }}&nbsp;Point</td>
                 </tr>
             </table>
         @endif
