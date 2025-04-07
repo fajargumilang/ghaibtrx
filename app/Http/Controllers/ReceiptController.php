@@ -270,13 +270,11 @@ class ReceiptController extends Controller
 
     public function downloadReceipt($id)
     {
-        // Ambil data receipt dari database berdasarkan $id
         $receipt = Receipt::with('items')->findOrFail($id);
         $totalQuantity = $receipt->items->sum('quantity');
         $totalItems = $receipt->items->count();
         $currentYear = Carbon::now()->year;
 
-        // Data yang akan dikirim ke view PDF
         $data = [
             'receipt' => $receipt,
             'totalItems' => $totalItems,
@@ -284,30 +282,46 @@ class ReceiptController extends Controller
             'currentYear' => $currentYear,
         ];
 
-        // Buat instance mPDF
-        $mpdf = new Mpdf([
+        // Render view ke HTML
+        $html = view('receipt', $data)->render();
+
+        $mpdf = new \Mpdf\Mpdf([
             'mode' => 'utf-8',
-            'format' => [80, 297], // 80mm x 297mm
+            'format' => [80, 9999], // Lebar 80mm, tinggi sementara 9999mm
             'margin_left' => 0,
             'margin_right' => 0,
             'margin_top' => 0,
             'margin_bottom' => 0,
             'margin_header' => 0,
             'margin_footer' => 0,
-            'autoPageBreak' => false, // Disable automatic page breaks
-
+            'autoPageBreak' => false,
         ]);
 
-        // Muat view dan render ke string
-        $html = view('receipt', $data)->render();
-
-        // Tulis HTML ke PDF
         $mpdf->WriteHTML($html);
 
-        // Unduh PDF
+        // === Hitung tinggi konten ===
+        // $mpdf->y adalah posisi vertical saat render selesai
+        // tMargin dan bMargin adalah margin atas dan bawah (yang sudah 0 di sini)
+        $contentHeight = $mpdf->y + $mpdf->tMargin + $mpdf->bMargin;
+
+        // === Render Kedua: Gunakan tinggi yang baru agar kertas hanya sesuai dengan isi ===
+        $mpdf2 = new \Mpdf\Mpdf([
+            'mode' => 'utf-8',
+            'format' => [80, $contentHeight],
+            'margin_left' => 0,
+            'margin_right' => 0,
+            'margin_top' => 0,
+            'margin_bottom' => 0,
+            'margin_header' => 0,
+            'margin_footer' => 0,
+            'autoPageBreak' => false,
+        ]);
+
+        $mpdf2->WriteHTML($html);
+
         return response()->stream(
-            function () use ($mpdf) {
-                $mpdf->Output('receipt.pdf', 'D');
+            function () use ($mpdf2) {
+                $mpdf2->Output('receipt.pdf', 'D');
             },
             200,
             [

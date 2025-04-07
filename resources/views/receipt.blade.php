@@ -5,7 +5,6 @@
     <style>
         html,
         body {
-
             height: 100%;
             margin: 0;
             padding: 0;
@@ -16,7 +15,6 @@
             padding: 0;
         }
 
-
         .text-uppercase {
             text-transform: uppercase;
         }
@@ -25,39 +23,25 @@
             float: right;
         }
 
-        .receipt-container {
-            page-break-inside: avoid;
-            /* Prevent page breaks inside container */
-            overflow: hidden;
-            /* Prevent overflow issues */
-        }
-
         table {
             border-collapse: collapse;
-            /* Ensure no extra space around table */
         }
 
         td,
         th {
             border: none;
-            /* Ensure no border causing extra space */
             padding: 0;
-            /* Remove padding if causing extra space */
         }
 
-
-
         .receipt-container {
-            /* Ukuran 80mm */
             width: 80mm;
-            /* Make sure container width matches PDF width */
             margin: 0 auto;
             padding: 10px;
             border: 0px solid #000;
             background: #fff;
             height: auto;
-            /* Ensure the container height adapts to content */
-
+            page-break-inside: avoid;
+            overflow: visible;
         }
 
         .receipt-header,
